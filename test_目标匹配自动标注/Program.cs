@@ -11,7 +11,7 @@ var data_dir_path = juanpan.data_dir_path;
 var img_files = new DirectoryInfo(data_dir_path).GetFiles();
 img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
 
-HOperatorSet.SetSystem("border_shape_models", "false");
+HOperatorSet.SetSystem("border_shape_models", "true");
 var anchor = juanpan.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
 
 foreach (var f in img_files)
@@ -28,8 +28,8 @@ foreach (var f in img_files)
     foreach (var p in result_match)
     {
         var x0 = (int)p[0] - border - 0;
-        var y0 = (int)p[1] - border + 10;
-        var angle = p[2] + 1;
+        var y0 = (int)p[1] - border + 0;
+        var angle = p[2] + 0;
         var scale = p[3];
         angle = angle * Math.PI / 180d;
         var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
@@ -238,7 +238,7 @@ class xray_sod523 : TemplateMatch
 
 class xray_sod723 : TemplateMatch
 {
-    public string data_dir_path = "\\\\192.168.11.10\\Public\\HuangRX\\X-RAY\\sot723\\SOT723-01";
+    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\sot723\SOT723-01";
     public static double[] region_coord = new[] { 184.549, 106.406, 254.157, 218.014 };
     public static int[] contrast = new[] { 16, 39, 4 };
     public static int mincontrast = 3;
