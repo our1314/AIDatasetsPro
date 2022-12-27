@@ -1,12 +1,10 @@
 ﻿using HalconDotNet;
 using OpenCvSharp;
-using System.Diagnostics.Contracts;
 using work;
 using work.cv;
 using work.math;
 
-//var data_dir_path = xray_juanpan_ncc.data_dir_path; //@"D:\桌面\JP";// @"D:/桌面/新建文件夹/sod323-111";//@"D:\桌面\新建文件夹\SC89-1235"; //@"D:\桌面\sc70-1212";//@"D:\桌面\LF-SC88";//
-var juanpan = new xray_sod723();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
+var juanpan = new xray_sod523();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
 var data_dir_path = juanpan.data_dir_path;
 var img_files = new DirectoryInfo(data_dir_path).GetFiles();
 img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
@@ -21,7 +19,7 @@ foreach (var f in img_files)
     int border = 300;
     Mat img = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, 0);
 
-    var result_match = juanpan.FindModel(img, 0.7, 0, out _, out _, MaxOverlap:0);
+    var result_match = juanpan.FindModel(img, 0.7, 0, out _, out _, MaxOverlap: 0);
     if (result_match == null) continue;
 
     var yolo_json = "";
@@ -144,7 +142,7 @@ class xray_sod123 : work.cv.TemplateMatch
     public xray_sod123()
     {
         Mat img_temp = new Mat(@"D:/桌面/新建文件夹/sod123 sc123-1213/LF-SOD123-12units-ALL__1__000_sc123-1213_0000.jpg", ImreadModes.Grayscale);
-        
+
         HOperatorSet.GenRectangle1(out HObject ModelRegion, 144.976, 216.532, 359.287, 332.475);
         var dis = CreateScaledShapeModel(img_temp, ModelRegion, new[] { 11, 16, 4 }, 5, scaleMin: 0.9, scaleMax: 1.1);
 
@@ -173,7 +171,7 @@ class xray_sod323 : TemplateMatch
         Cv2.WaitKey();
         Cv2.DestroyAllWindows();
     }
-    
+
 }
 class xray_sot23e : TemplateMatch
 {
@@ -217,8 +215,8 @@ class 锡膏检测 : TemplateMatch
 }
 class xray_sod523 : TemplateMatch
 {
-    public string data_dir_path = "\\\\192.168.11.10\\Public\\HuangRX\\X-RAY\\sod523\\LF-SOD523-16units-all\\1---2-12";
-    public static double[] region_coord = new[] { 295.326, 540.4, 417.027, 617.205 };
+    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\sod523\LF-SOD523-16units-all\1---2-12";
+    public static double[] region_coord = new[] { 294.994, 540.787, 412.348, 616.143 };
     public static int[] contrast = new[] { 15, 27, 4 };
     public static int mincontrast = 3;
 
