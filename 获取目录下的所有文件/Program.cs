@@ -1,4 +1,4 @@
-﻿Console.WriteLine("输入文件夹路径：");
+﻿Console.WriteLine("输入文件夹路径：(可以拖拽!)");
 var path = Console.ReadLine();
 var a = new DirectoryInfo(path).GetFiles();
 var files = a.Select(p => Path.GetFileNameWithoutExtension(p.Name)).ToArray();
