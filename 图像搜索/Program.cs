@@ -33,6 +33,7 @@ images = images.OrderBy((p) =>
 //3、最相似的图像
 var f1 = new Mat(images.First().FullName, ImreadModes.Unchanged);
 f1 = f1.Resize(temp_src.Size());
+
 //4、显示
 var dis = new Mat();
 Cv2.HConcat(temp_src, f1, dis);
