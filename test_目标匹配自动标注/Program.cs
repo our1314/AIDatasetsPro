@@ -55,7 +55,7 @@ foreach (var f in img_files)
     File.WriteAllText(save_path, yolo_json);
 
     Cv2.ImShow("dis", dis);
-    Cv2.WaitKey();
+    Cv2.WaitKey(1);
 }
 
 //在目录下保存classes.txt，LabelImg需要此文件。
@@ -252,7 +252,7 @@ class xray_sod723 : TemplateMatch
         var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
 
         Cv2.ImShow("dis", dis);
-        Cv2.WaitKey();
+        Cv2.WaitKey(1);
         Cv2.DestroyAllWindows();
     }
 }
