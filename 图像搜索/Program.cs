@@ -1,9 +1,13 @@
 ﻿using OpenCvSharp;
 
-Console.WriteLine("Hello, World!");
+//var searchimage = @"D:\work\proj\xray\test_learn_python\image_classification\cnn_imgcls\run\train\exp_xray_sot23_juanpan\val_fail_img\1.png";
+//var searchpath = @"D:\work\files\deeplearn_dataset\x-ray\cls-dataset\sot23_juanpan\train\ok";
 
-var searchimage = @"D:\work\proj\xray\test_learn_python\image_classification\cnn_imgcls\run\train\exp_xray_sot23_juanpan\val_fail_img\1.png";
-var searchpath = @"D:\work\files\deeplearn_dataset\x-ray\cls-dataset\sot23_juanpan\train\ok";
+Console.WriteLine("输入搜索图像的路径：");
+var searchimage = Console.ReadLine();
+Console.WriteLine("输入搜索文件夹路径：");
+var searchpath = Console.ReadLine();
+
 
 //1、被搜索图像
 var temp_src = new Mat(searchimage, ImreadModes.Unchanged);
