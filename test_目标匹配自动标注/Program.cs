@@ -16,18 +16,18 @@ foreach (var f in img_files)
 {
     Mat src = new Mat(f.FullName, ImreadModes.Grayscale);
     var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
-    int border = 300;
-    Mat img = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, 0);
+    //int border = 300;
+    //Mat img = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, 0);
 
-    var result_match = juanpan.FindModel(img, 0.7, 0, out _, out _, MaxOverlap: 0);
+    var result_match = juanpan.FindModel(src, 0.7, 0, out _, out _, MaxOverlap: 0);
     if (result_match == null) continue;
 
     var yolo_json = "";
     foreach (var p in result_match)
     {
-        var x0 = (int)p[0] - border - 0;
-        var y0 = (int)p[1] - border + 0;
-        var angle = p[2] + 0;
+        var x0 = (int)p[0];
+        var y0 = (int)p[1];
+        var angle = 0d;
         var scale = p[3];
         angle = angle * Math.PI / 180d;
         var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
@@ -40,10 +40,10 @@ foreach (var f in img_files)
         }
         #endregion
 
-        var cx = (double)x0 / img.Width;
-        var cy = (double)y0 / img.Height;
-        var w = (double)anchor1.Width / img.Width;
-        var h = (double)anchor1.Height / img.Height;
+        var cx = (double)x0 / src.Width;
+        var cy = (double)y0 / src.Height;
+        var w = (double)anchor1.Width / src.Width;
+        var h = (double)anchor1.Height / src.Height;
 
         yolo_json += $"0 {cx} {cy} {w} {h}\r\n";
     }
@@ -57,7 +57,7 @@ foreach (var f in img_files)
 }
 
 //在目录下保存classes.txt，LabelImg需要此文件。
-File.WriteAllText(@$"{data_dir_path}\classes.txt", "1");
+File.WriteAllText(@$"{data_dir_path}\classes.txt", "0");
 
 
 class xray_juanpan : work.cv.TemplateMatch
