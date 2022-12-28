@@ -4,9 +4,9 @@
 //var searchpath = @"D:\work\files\deeplearn_dataset\x-ray\cls-dataset\sot23_juanpan\train\ok";
 
 Console.WriteLine("输入搜索图像的路径：");
-var searchimage = Console.ReadLine();
+var searchimage = Console.ReadLine().Replace("\"", "");
 Console.WriteLine("输入搜索文件夹路径：");
-var searchpath = Console.ReadLine();
+var searchpath = Console.ReadLine().Replace("\"", "");
 
 
 //1、被搜索图像
@@ -18,6 +18,8 @@ images = images.Where(p => p.Extension == ".bmp" || p.Extension == ".png" || p.E
 images = images.OrderBy((p) =>
 {
     var img = new Mat(p.FullName, ImreadModes.Color);
+    img = img.Resize(temp.Size());
+
     Mat diff = new Mat();
     Cv2.Absdiff(temp, img, diff);
 
@@ -44,12 +46,20 @@ var I = new Mat(temp.Rows, 10, temp.Type(), Scalar.Black);
 Cv2.HConcat(new[] { temp, I, f1 }, dis);
 
 //如果目标尺寸过大则按比例进行缩放
-var w = 1500.0;
+var thr_max = 1500.0;
 var max = Math.Max(dis.Width, dis.Height);
-if (max > w)
+if (max > thr_max)
 {
-    var f = w / max;
-    dis = dis.Resize(new Size(), f, f);
+    var f = thr_max / max;
+    dis = dis.Resize(new Size(), f, f, interpolation: InterpolationFlags.Nearest);
+}
+
+var thr_min = 500.0;
+var min = Math.Min(dis.Width, dis.Height);
+if (min < thr_min)
+{
+    var f = thr_min / max;
+    dis = dis.Resize(new Size(), f, f, interpolation: InterpolationFlags.Nearest);
 }
 
 
