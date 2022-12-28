@@ -1,11 +1,11 @@
 ﻿/*
- * 给定前景图像和背景图像，产生随机坐标将前景图像贴在背景图像上，生成yolo格式label文件和语义分割label
+ * 给定前景图像和背景图像，将前景图随机贴在背景图上，生成yolo格式label文件和语义分割label
  */
 using OpenCvSharp;
 using work.cv;
 using Size = OpenCvSharp.Size;
 
-Console.WriteLine("给定目标文件夹路径，其中包含前景图(fore_xxx.png，四通道图像（透明）)和背景图(格式任意)，可以多个");
+Console.WriteLine("给定目标文件夹路径，其中包含前景图(forexxx.png，四通道图像（透明）)和背景图(格式任意)，可以多个");
 Console.WriteLine("输入包含前景图和背景图的文件夹路径：");
 
 var path = Console.ReadLine();
