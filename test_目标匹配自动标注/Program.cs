@@ -4,13 +4,13 @@ using work;
 using work.cv;
 using work.math;
 
-var juanpan = new xray_sod523();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
-var data_dir_path = juanpan.data_dir_path;
+var ic = new xray_sod723();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
+var data_dir_path = ic.data_dir_path;
 var img_files = new DirectoryInfo(data_dir_path).GetFiles();
 img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
 
 HOperatorSet.SetSystem("border_shape_models", "true");
-var anchor = juanpan.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
+var anchor = ic.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
 
 foreach (var f in img_files)
 {
@@ -19,7 +19,7 @@ foreach (var f in img_files)
     //int border = 300;
     //Mat img = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, 0);
 
-    var result_match = juanpan.FindModel(src, 0.7, 0, out _, out _, MaxOverlap: 0);
+    var result_match = ic.FindModel(src, 0.7, 0, out _, out _, MaxOverlap: 0);
     if (result_match == null) continue;
 
     var yolo_json = "";
@@ -215,7 +215,7 @@ class 锡膏检测 : TemplateMatch
 }
 class xray_sod523 : TemplateMatch
 {
-    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\sod523\LF-SOD523-16units-all\1---2-12";
+    public string data_dir_path = @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod523";
     public static double[] region_coord = new[] { 294.994, 540.787, 412.348, 616.143 };
     public static int[] contrast = new[] { 15, 27, 4 };
     public static int mincontrast = 3;
@@ -236,7 +236,7 @@ class xray_sod523 : TemplateMatch
 
 class xray_sod723 : TemplateMatch
 {
-    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\sot723\SOT723-01";
+    public string data_dir_path = @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod723";
     public static double[] region_coord = new[] { 184.549, 106.406, 254.157, 218.014 };
     public static int[] contrast = new[] { 16, 39, 4 };
     public static int mincontrast = 3;
