@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "图像搜索", "图像搜�
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "获取目录下的所有文件", "获取目录下的所有文件\获取目录下的所有文件.csproj", "{6C95ACA5-1A58-462B-BB1A-D798F9E86BC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_生成目标检测和语义分割数据集", "test_生成目标检测数据集\test_生成目标检测和语义分割数据集.csproj", "{6EA032BE-8957-4DDE-8E7D-000131DE5FF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_生成目标检测和语义分割数据集", "test_生成目标检测数据集\test_生成目标检测和语义分割数据集.csproj", "{6EA032BE-8957-4DDE-8E7D-000131DE5FF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_将yolo标签全改为0", "test_将yolo标签全改为0\test_将yolo标签全改为0.csproj", "{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{6EA032BE-8957-4DDE-8E7D-000131DE5FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EA032BE-8957-4DDE-8E7D-000131DE5FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EA032BE-8957-4DDE-8E7D-000131DE5FF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
