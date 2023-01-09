@@ -258,7 +258,7 @@ class xray_sod723 : TemplateMatch
 class xray_sod23lc : TemplateMatch
 {
     public string data_dir_path = @"//192.168.11.10/Public/HuangRX/X-RAY/银浆焊 sot23lc/SOT23LC1237";
-    public static double[] region_coord = new[] { 344.305, 289.684, 593.502, 431.701 };
+    public static double[] region_coord = new[] { 334.842, 718.912, 594.006, 857.916 };
     public static int[] contrast = new[] { 12, 21, 8 };
     public static int mincontrast = 3;
 
