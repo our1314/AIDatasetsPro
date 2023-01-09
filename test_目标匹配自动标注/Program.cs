@@ -4,7 +4,7 @@ using work;
 using work.cv;
 using work.math;
 
-var ic = new xray_sod723();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
+var ic = new xray_sod23lc();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
 var data_dir_path = ic.data_dir_path;
 var img_files = new DirectoryInfo(data_dir_path).GetFiles();
 img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
@@ -251,6 +251,27 @@ class xray_sod723 : TemplateMatch
 
         Cv2.ImShow("dis", dis);
         Cv2.WaitKey(1);
+        Cv2.DestroyAllWindows();
+    }
+}
+
+class xray_sod23lc : TemplateMatch
+{
+    public string data_dir_path = @"//192.168.11.10/Public/HuangRX/X-RAY/银浆焊 sot23lc/SOT23 LC SW";
+    public static double[] region_coord = new[] { 344.305, 289.684, 593.502, 431.701 };
+    public static int[] contrast = new[] { 12, 21, 8 };
+    public static int mincontrast = 3;
+
+    public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+    public xray_sod23lc()
+    {
+        Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__000_LC  SW-12_0000.jpg", ImreadModes.Grayscale);
+
+        HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+        var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
+
+        Cv2.ImShow("dis", dis);
+        Cv2.WaitKey();
         Cv2.DestroyAllWindows();
     }
 }
