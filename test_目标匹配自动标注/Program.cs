@@ -280,7 +280,7 @@ class xray_sod23lc : TemplateMatch
 
 class xray_sot23 : TemplateMatch
 {
-    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sot23\retrain\det";
+    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sot23\retrain3\det";
     public static double[] region_coord = new[] { 399.344, 649.157, 500.396, 901.083 };
     public static int[] contrast = new[] { 12, 21, 8 };
     public static int mincontrast = 3;
@@ -288,7 +288,7 @@ class xray_sot23 : TemplateMatch
     public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
     public xray_sot23()
     {
-        Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT23-9units-clean__1__024_LA23020689-01_0000.jpg", ImreadModes.Grayscale);
+        Mat img_temp = new Mat(@$"{@"\\192.168.11.10\Public\HuangRX\X-RAY\smt sot23\retrain1\det"}\LF-SOT23-9units-clean__1__024_LA23020689-01_0000.jpg", ImreadModes.Grayscale);
 
         HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
         var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
