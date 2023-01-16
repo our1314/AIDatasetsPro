@@ -233,7 +233,6 @@ class xray_sod523 : TemplateMatch
         Cv2.DestroyAllWindows();
     }
 }
-
 class xray_sod723 : TemplateMatch
 {
     public string data_dir_path = @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod723";
@@ -254,7 +253,6 @@ class xray_sod723 : TemplateMatch
         Cv2.DestroyAllWindows();
     }
 }
-
 class xray_sod23lc : TemplateMatch
 {
     public string data_dir_path = @"//192.168.11.10/Public/HuangRX/X-RAY/银浆焊 sot23lc/SOT23LC1237";
@@ -275,9 +273,6 @@ class xray_sod23lc : TemplateMatch
         Cv2.DestroyAllWindows();
     }
 }
-
-//399.344, 649.157, 500.396, 901.083
-
 class xray_sot23 : TemplateMatch
 {
     public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sot23\retrain\det";
