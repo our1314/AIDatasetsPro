@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_将yolo标签全改为
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_生成目标检测和语义分割数据集", "test_生成目标检测和语义分割数据集\test_生成目标检测和语义分割数据集.csproj", "{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "将目录下的图像全部改为指定格式", "将目录下的图像全部改为jpg格式\将目录下的图像全部改为指定格式.csproj", "{6C71CE6B-7919-4EE1-9374-E3B227D55939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "将目录下的图像全部改为指定格式", "将目录下的图像全部改为指定格式\将目录下的图像全部改为指定格式.csproj", "{7CBBE269-0B23-46C5-A780-E50394C622F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C71CE6B-7919-4EE1-9374-E3B227D55939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C71CE6B-7919-4EE1-9374-E3B227D55939}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C71CE6B-7919-4EE1-9374-E3B227D55939}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C71CE6B-7919-4EE1-9374-E3B227D55939}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
