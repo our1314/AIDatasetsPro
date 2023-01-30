@@ -4,7 +4,7 @@ using work;
 using work.cv;
 using work.math;
 
-var ic = new xray_sot25();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
+var ic = new xray_sot26();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
 var data_dir_path = ic.data_dir_path;
 var img_files = new DirectoryInfo(data_dir_path).GetFiles();
 img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
@@ -338,9 +338,9 @@ class xray_sot25_1 : TemplateMatch
 
 class xray_sot26 : TemplateMatch
 {
-    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot25\SOT26 SW";
-    public static double[] region_coord = new[] { 16.4716, 302.715, 250.268, 425.192 };
-    public static int[] contrast = new[] { 12, 21, 8 };
+    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT26 SW";
+    public static double[] region_coord = new[] { 8.96439, 296.582, 259.153, 434.584 };
+    public static int[] contrast = new[] { 20, 41, 8 };
     public static int mincontrast = 3;
 
     public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
@@ -359,8 +359,8 @@ class xray_sot26 : TemplateMatch
 class xray_sot26_1 : TemplateMatch
 {
     public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT261236";
-    public static double[] region_coord = new[] { 52.7058, 299.265, 282.189, 423.467 };
-    public static int[] contrast = new[] { 12, 21, 8 };
+    public static double[] region_coord = new[] { 44.3358, 291.407, 290.211, 427.684 };
+    public static int[] contrast = new[] { 20, 41, 8 };
     public static int mincontrast = 3;
 
     public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
