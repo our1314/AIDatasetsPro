@@ -4,7 +4,7 @@ using work;
 using work.cv;
 using work.math;
 
-var ic = new xray_sot26();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
+var ic = new xray_sot26_1();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
 var data_dir_path = ic.data_dir_path;
 var img_files = new DirectoryInfo(data_dir_path).GetFiles();
 img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
