@@ -124,6 +124,26 @@ class xray_sc70 : work.cv.TemplateMatch
         Cv2.DestroyAllWindows();
     }
 }
+class xray_sc70_1 : TemplateMatch
+{
+    public string data_dir_path = @"//10.10.10.236/Public/HuangRX/X-RAY/smt sc70/src_ng";
+    public static double[] region_coord = new[] { 126.507, 235.61, 240.983, 421.285 };
+    public static int[] contrast = new[] { 25, 45, 8 };
+    public static int mincontrast = 3;
+
+    public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+    public xray_sc70_1()
+    {
+        Mat img_temp = new Mat(@$"{data_dir_path}\LF-SC70 88-8units-clean__1__000_LA23040203-1234_0000.png", ImreadModes.Grayscale);
+
+        HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+        var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
+
+        Cv2.ImShow("dis", dis);
+        Cv2.WaitKey();
+        Cv2.DestroyAllWindows();
+    }
+}
 class xray_sc89 : work.cv.TemplateMatch
 {
     public xray_sc89()
