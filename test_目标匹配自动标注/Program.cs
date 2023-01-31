@@ -4,7 +4,7 @@ using work;
 using work.cv;
 using work.math;
 
-var ic = new xray_sot26_1();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
+var ic = new xray_sc70_1();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
 var data_dir_path = ic.data_dir_path;
 var img_files = new DirectoryInfo(data_dir_path).GetFiles();
 img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
@@ -126,7 +126,7 @@ class xray_sc70 : work.cv.TemplateMatch
 }
 class xray_sc70_1 : TemplateMatch
 {
-    public string data_dir_path = @"//10.10.10.236/Public/HuangRX/X-RAY/smt sc70/src_ng";
+    public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sc70\src_ng";
     public static double[] region_coord = new[] { 126.507, 235.61, 240.983, 421.285 };
     public static int[] contrast = new[] { 25, 45, 8 };
     public static int mincontrast = 3;
