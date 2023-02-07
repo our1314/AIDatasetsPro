@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_卷盘数据集处理", "test_卷盘数据集处理\test_卷盘数据集处理.csproj", "{B6E37F88-BAD3-431D-BDB9-164A6CC38394}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_模板匹配自动标注", "test_目标匹配自动标注\test_模板匹配自动标注.csproj", "{30EA20E8-7137-4629-95C0-BCC822FA7125}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIDatasetsPro", "AIDatasetsPro\AIDatasetsPro.csproj", "{109D610C-43F2-422D-911F-4D54A6487152}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{B6E37F88-BAD3-431D-BDB9-164A6CC38394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6E37F88-BAD3-431D-BDB9-164A6CC38394}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6E37F88-BAD3-431D-BDB9-164A6CC38394}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30EA20E8-7137-4629-95C0-BCC822FA7125}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30EA20E8-7137-4629-95C0-BCC822FA7125}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30EA20E8-7137-4629-95C0-BCC822FA7125}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30EA20E8-7137-4629-95C0-BCC822FA7125}.Release|Any CPU.Build.0 = Release|Any CPU
 		{109D610C-43F2-422D-911F-4D54A6487152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{109D610C-43F2-422D-911F-4D54A6487152}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{109D610C-43F2-422D-911F-4D54A6487152}.Release|Any CPU.ActiveCfg = Release|Any CPU
