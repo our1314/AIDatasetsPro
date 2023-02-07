@@ -7,15 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_卷盘数据集处理"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_模板匹配自动标注", "test_目标匹配自动标注\test_模板匹配自动标注.csproj", "{30EA20E8-7137-4629-95C0-BCC822FA7125}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "图像搜索", "图像搜索\图像搜索.csproj", "{C9D6F271-CCEA-4465-9E0A-698E2E228835}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "获取目录下的所有文件", "获取目录下的所有文件\获取目录下的所有文件.csproj", "{6C95ACA5-1A58-462B-BB1A-D798F9E86BC9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_将yolo标签全改为0", "test_将yolo标签全改为0\test_将yolo标签全改为0.csproj", "{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_生成目标检测和语义分割数据集", "test_生成目标检测和语义分割数据集\test_生成目标检测和语义分割数据集.csproj", "{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "将目录下的图像全部改为指定格式", "将目录下的图像全部改为指定格式\将目录下的图像全部改为指定格式.csproj", "{7CBBE269-0B23-46C5-A780-E50394C622F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIDatasetsPro", "AIDatasetsPro\AIDatasetsPro.csproj", "{109D610C-43F2-422D-911F-4D54A6487152}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,26 +23,10 @@ Global
 		{30EA20E8-7137-4629-95C0-BCC822FA7125}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30EA20E8-7137-4629-95C0-BCC822FA7125}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30EA20E8-7137-4629-95C0-BCC822FA7125}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9D6F271-CCEA-4465-9E0A-698E2E228835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9D6F271-CCEA-4465-9E0A-698E2E228835}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9D6F271-CCEA-4465-9E0A-698E2E228835}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9D6F271-CCEA-4465-9E0A-698E2E228835}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C95ACA5-1A58-462B-BB1A-D798F9E86BC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C95ACA5-1A58-462B-BB1A-D798F9E86BC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C95ACA5-1A58-462B-BB1A-D798F9E86BC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C95ACA5-1A58-462B-BB1A-D798F9E86BC9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40D715F5-C562-431C-8FCA-A3C1EB10DA4C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4862A8AA-4445-49F4-9CA9-1C88EDAA43E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CBBE269-0B23-46C5-A780-E50394C622F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{109D610C-43F2-422D-911F-4D54A6487152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{109D610C-43F2-422D-911F-4D54A6487152}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{109D610C-43F2-422D-911F-4D54A6487152}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{109D610C-43F2-422D-911F-4D54A6487152}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
