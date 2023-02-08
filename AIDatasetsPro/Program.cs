@@ -21,7 +21,8 @@ namespace AIDatasetsPro
                 "XRray卷盘",
                 new test_XRay卷盘_调整图像尺寸_四周补零(),
                 new test_XRay卷盘_修改XML值(),
-                new test_XRay卷盘_XML转DOTA()
+                new test_XRay卷盘_XML转DOTA(),
+                new test_将目标文件夹的图像按比例缩放至1024并补零()
             );
             testManager.AddTests(
                 "tools",
@@ -29,8 +30,7 @@ namespace AIDatasetsPro
                 new test_将yolo标签全改为0(),
                 new test_简单图像搜索(),
                 new test_将目录下的图像全部改为指定格式(),
-                new test_获取目录下的所有文件列表(),
-                new test_将目标文件夹的图像按比例缩放至1024并补零()
+                new test_获取目录下的所有文件列表()
             );
 
             testManager.ShowTestEntrance();
