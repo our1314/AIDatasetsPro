@@ -26,31 +26,32 @@ namespace AIDatasetsPro.src
             HOperatorSet.SetSystem("border_shape_models", "true");
             var anchor = ic.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
 
+            bool MakeBorder = false;
+            int border = 300;
             foreach (var f in img_files)
             {
                 Mat src = new Mat(f.FullName, ImreadModes.Grayscale);
-
-                int border = 300;
-                src = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, 0);
-
                 var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
+                if (MakeBorder)
+                {
+                    src = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(src));
+                }
                 
-
                 var result_match = ic.FindModel(src, 0.7, 0, out _, out _, MaxOverlap: 0);
                 if (result_match == null) continue;
 
-                var yolo_json = "";
+                var str_label = "";
                 foreach (var p in result_match)
                 {
-                    var x0 = (int)p[0];
-                    var y0 = (int)p[1];
+                    var x0 = MakeBorder ? (int)p[0] - border : (int)p[0];
+                    var y0 = MakeBorder ? (int)p[1] - border : (int)p[1];
                     var angle = p[2];
                     var scale = p[3];
                     var score = p[4];
 
                     angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
-                    CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
+                    var pts = CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
                     #region 保存ROI
                     {
@@ -59,17 +60,25 @@ namespace AIDatasetsPro.src
                     }
                     #endregion
 
-                    var cx = (double)x0 / src.Width;
-                    var cy = (double)y0 / src.Height;
-                    var w = (double)anchor1.Width / src.Width;
-                    var h = (double)anchor1.Height / src.Height;
+                    var classname = ic.GetType().Name;
+                    if (!classname.Contains("juanpan"))
+                    {
+                        var cx = (double)x0 / src.Width;
+                        var cy = (double)y0 / src.Height;
+                        var w = (double)anchor1.Width / src.Width;
+                        var h = (double)anchor1.Height / src.Height;
 
-                    yolo_json += $"0 {cx} {cy} {w} {h}\r\n";
+                        str_label += $"0 {cx} {cy} {w} {h}\r\n";
+                    }
+                    else
+                    {
+                        str_label += $"{pts[0].X:F3} {pts[0].Y:F3} {pts[1].X:F3} {pts[1].Y:F3} {pts[2].X:F3} {pts[2].Y:F3} {pts[3].X:F3} {pts[3].Y:F3} 0 0\r\n";
+                    }
                 }
-                yolo_json = yolo_json.Trim();
+                str_label = str_label.Trim();
 
                 var save_path = f.FullName.Replace(".jpg", ".txt");
-                File.WriteAllText(save_path, yolo_json);
+                File.WriteAllText(save_path, str_label);
 
                 Cv2.ImShow("dis", dis.PyrDown());
                 Cv2.WaitKey(1);
