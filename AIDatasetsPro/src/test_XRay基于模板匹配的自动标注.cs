@@ -11,6 +11,13 @@ namespace AIDatasetsPro.src
     {
         public override void RunTest()
         {
+            var @namespace = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Namespace;
+            Console.WriteLine("输入类名：");
+
+            var className = $"{@namespace}.{Console.ReadLine().Trim()}";
+            var type = Type.GetType($"{@namespace}.{className}");
+            var obj = type.Assembly.CreateInstance(className);
+
             var ic = new xray_sot23e();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
             var data_dir_path = ic.data_dir_path;
             var img_files = new DirectoryInfo(data_dir_path).GetFiles();
