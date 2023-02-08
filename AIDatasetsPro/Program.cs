@@ -13,10 +13,12 @@ namespace AIDatasetsPro
                 "创建数据集",
                 new test_生成目标检测和语义分割数据集()
             );
+
             testManager.AddTests(
                 "自动标注",
                 new test_XRay基于模板匹配的自动标注()
             );
+
             testManager.AddTests(
                 "XRray卷盘",
                 new test_XRay卷盘_调整图像尺寸_四周补零(),
@@ -24,6 +26,7 @@ namespace AIDatasetsPro
                 new test_XRay卷盘_XML转DOTA(),
                 new test_将目标文件夹的图像按比例缩放至1024并补零()
             );
+
             testManager.AddTests(
                 "tools",
                 new test_删除XRay_C2文件夹内的无效链接(),
