@@ -29,9 +29,12 @@ namespace AIDatasetsPro.src
             foreach (var f in img_files)
             {
                 Mat src = new Mat(f.FullName, ImreadModes.Grayscale);
+
+                int border = 300;
+                src = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, 0);
+
                 var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
-                //int border = 300;
-                //Mat img = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, 0);
+                
 
                 var result_match = ic.FindModel(src, 0.7, 0, out _, out _, MaxOverlap: 0);
                 if (result_match == null) continue;
@@ -42,8 +45,8 @@ namespace AIDatasetsPro.src
                     var x0 = (int)p[0];
                     var y0 = (int)p[1];
                     var angle = p[2];
-                    var scale = p[4];
-                    var score = p[5];
+                    var scale = p[3];
+                    var score = p[4];
 
                     angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
@@ -68,7 +71,7 @@ namespace AIDatasetsPro.src
                 var save_path = f.FullName.Replace(".jpg", ".txt");
                 File.WriteAllText(save_path, yolo_json);
 
-                Cv2.ImShow("dis", dis);
+                Cv2.ImShow("dis", dis.PyrDown());
                 Cv2.WaitKey(1);
             }
 
@@ -437,6 +440,26 @@ namespace AIDatasetsPro.src
         public xray_sc70_juanpan()
         {
             var img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__000_2.4SC70-01_0000.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+    class xray_sc88_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sc88\2.4 SC88-01";
+        public double[] region_coord = new[] { 226.494, 1130.51, MathExp.Rad(-17.3797), 99.0642, 47.0692 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
+        public xray_sc88_juanpan()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__000_2.4 SC88-01_0000.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
             //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
