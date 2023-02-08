@@ -68,7 +68,7 @@ namespace AIDatasetsPro.src
         }
     }
 
-    #region
+    #region 
     class xray_juanpan : work.cv.TemplateMatch
     {
         public string data_dir_path = "D:\\桌面\\新建文件夹";
@@ -364,7 +364,6 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-
     class xray_sot26 : TemplateMatch
     {
         public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT26 SW";
