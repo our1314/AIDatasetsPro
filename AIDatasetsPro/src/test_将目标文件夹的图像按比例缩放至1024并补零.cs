@@ -1,12 +1,16 @@
 ﻿using OpenCvSharp;
-using work.cv;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using work.test;
 
-namespace test_卷盘数据集处理
+namespace AIDatasetsPro.src
 {
-    internal class 将图像按比例缩放到1024并补零
+    internal class test_将目标文件夹的图像按比例缩放至1024并补零 : ConsoleTestBase
     {
-
-        public static void run()
+        public override void RunTest()
         {
             var dir = @"D:\桌面\JP";
             double k = 1024d / 1536d;
@@ -21,7 +25,6 @@ namespace test_卷盘数据集处理
                 src = src.CopyMakeBorder(0, 1024 - src.Height, 0, 0, BorderTypes.Constant);
                 //var mask = src.Threshold(240, 255, ThresholdTypes.Binary);
                 //src = src.SetTo(0, mask);
-
                 src.ImSave($@"{dir}\out\{Path.GetFileNameWithoutExtension(file.FullName)}.png");
             }
         }

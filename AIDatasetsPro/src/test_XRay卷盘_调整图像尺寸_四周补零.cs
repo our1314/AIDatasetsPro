@@ -1,18 +1,29 @@
 ﻿using Newtonsoft.Json;
 using OpenCvSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
+using work.cv;
+using work.test;
 
-namespace test_cvt
+namespace AIDatasetsPro.src
 {
-    internal class 修改XML值
+    internal class test_XRay卷盘_调整图像尺寸_四周补零 : ConsoleTestBase
     {
-        public static void run()
+        public override void RunTest()
         {
             var images = new DirectoryInfo(@"D:\桌面\xray-juanpan_已标注数据集\jsons").GetFiles();
             images = images.Where(f => f.Extension == ".jpg").ToArray();
 
             var files_xml = new DirectoryInfo(@"D:\桌面\xray-juanpan_已标注数据集\jsons").GetFiles();
             files_xml = files_xml.Where(f => f.Extension == ".xml").ToArray();
+
+            //Mat P = Mat.Eye(3, 3, MatType.CV_64FC1);
+            //P.Set<double>(0, 2, 200);
+            //P.Set<double>(1, 2, 200);
 
             Mat dis = new Mat();
             foreach (var f in files_xml)
@@ -108,12 +119,10 @@ namespace test_cvt
                     dotalabel += $"{dota_pts[0].X} {dota_pts[0].Y} {dota_pts[1].X} {dota_pts[1].Y} {dota_pts[2].X} {dota_pts[2].Y} {dota_pts[3].X} {dota_pts[3].Y} {cls} {0}\r\n";
                 }
 
-                //Cv2.ImShow("dis", dis);
-                //Cv2.WaitKey();
+                Cv2.ImShow("dis", dis);
+                Cv2.WaitKey();
 
-                var ss = JsonConvert.SerializeObject(aa);
-                XmlDocument xml_ = JsonConvert.DeserializeXmlNode(ss);
-                xml_.Save($@"D:\桌面\out (2)\{f.Name}");
+                src.ImSave(imgfile.FullName.Replace(".jpg", ".png"));
             }
         }
     }

@@ -1,22 +1,26 @@
 ﻿using Newtonsoft.Json;
 using OpenCvSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
-using work.cv;
+using work.test;
 
-namespace test_cvt
+namespace AIDatasetsPro.src
 {
-    internal class XML转dota
+    internal class test_XRay卷盘_修改XML值 : ConsoleTestBase
     {
-        public static void run()
+        public override void RunTest()
         {
-            var dir = @"\\192.168.11.12\自动化\刘林\temp\1";
-            var files_xml = new DirectoryInfo(dir).GetFiles();
+            var images = new DirectoryInfo(@"D:\桌面\xray-juanpan_已标注数据集\jsons").GetFiles();
+            images = images.Where(f => f.Extension == ".jpg").ToArray();
+
+            var files_xml = new DirectoryInfo(@"D:\桌面\xray-juanpan_已标注数据集\jsons").GetFiles();
             files_xml = files_xml.Where(f => f.Extension == ".xml").ToArray();
-            double k = 1024d / 1536d;
 
-            var files_images = new DirectoryInfo(dir).GetFiles();
-            files_images = files_images.Where(f => f.Extension == ".jpg" || f.Extension == ".png" || f.Extension == ".bmp").ToArray();
-
+            Mat dis = new Mat();
             foreach (var f in files_xml)
             {
                 XmlDocument doc = new XmlDocument();
@@ -27,19 +31,20 @@ namespace test_cvt
 
                 double width = aa["annotation"]["size"]["width"];
                 double height = aa["annotation"]["size"]["height"];
+                aa["annotation"]["size"]["width"] = 1024;
+                aa["annotation"]["size"]["height"] = 1024;
                 var yololabel = "";
                 var dotalabel = "";
 
                 var xmlName = Path.GetFileNameWithoutExtension(f.FullName);
-                var imgfile = files_images.First(f => Path.GetFileNameWithoutExtension(f.FullName) == xmlName);
+                var imgfile = images.First(f => f.FullName.Contains(xmlName));
                 var src = new Mat(imgfile.FullName, ImreadModes.Unchanged);
-                src = src.Resize(new Size(), k, k);
-                src = src.CopyMakeBorder(0, 1024 - src.Height, 0, 0, BorderTypes.Constant);
-                var mask = src.Threshold(240, 255, ThresholdTypes.Binary);
-                src = src.SetTo(0, mask);
 
-                var dis = src.Clone();
-                dis = dis.Channels() == 1 ? dis.CvtColor(ColorConversionCodes.GRAY2BGR) : dis;
+                src = src.CopyMakeBorder(200, 200, 200, 200, BorderTypes.Constant, 0);
+                var k = 1024f / Math.Max(src.Width, src.Height);
+                src = src.Resize(new Size(), k, k);
+                src = src.CopyMakeBorder(0, 1024 - src.Height, 0, 0, BorderTypes.Constant, 0);//填充至1024
+                dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
 
                 var dota_pts = new Point2d[4];
                 foreach (var a in aa["annotation"]["object"])
@@ -53,10 +58,16 @@ namespace test_cvt
                     double h = bbox["h"];
                     double angle = bbox["angle"];
 
-                    cx *= k;
-                    cy *= k;
-                    w *= k;
-                    h *= k;
+                    cx = (cx + 200) * k;
+                    cy = (cy + 200) * k;
+                    w = w * k;
+                    h = h * k;
+
+                    bbox["cx"] = cx;
+                    bbox["cy"] = cy;
+                    bbox["w"] = w;
+                    bbox["h"] = h;
+
 
                     var pts = new Mat(2, 4, MatType.CV_64F, new double[,]
                     {
@@ -76,6 +87,7 @@ namespace test_cvt
                             { Math.Cos(theta),-Math.Sin(theta) },
                             { Math.Sin(theta), Math.Cos(theta) }
                         });
+                        Mat rot_pp = rot * pts;
                         Mat center = new Mat(2, 1, MatType.CV_64F, new double[,] { { cx }, { cy } }) * Mat.Ones(1, 4, MatType.CV_64FC1);
                         Mat rot_pts = rot * pts + center;
 
@@ -87,33 +99,27 @@ namespace test_cvt
                             dota_pts[i] = new Point2d(xx, yy);
                             pts_[i] = new Point(xx, yy);
                         }
+
                         Cv2.Polylines(dis, new[] { pts_ }, true, Scalar.Red, 3);
                         dis.Circle(new Point(cx, cy), 10, Scalar.Red, -1);
                     }
 
-                    //if (w < h)
-                    //{
-                    //    var tmp = w;
-                    //    w = h;
-                    //    h = tmp;
-                    //}
-                    //yololabel += $"{cls} {cx / width} {cy / height} {w / width} {h / height} {angle / Math.PI * 180d}\r\n";
-
+                    if (w < h)
+                    {
+                        var tmp = w;
+                        w = h;
+                        h = tmp;
+                    }
+                    yololabel += $"{cls} {cx / width} {cy / height} {w / width} {h / height} {angle / Math.PI * 180d}\r\n";
                     dotalabel += $"{dota_pts[0].X} {dota_pts[0].Y} {dota_pts[1].X} {dota_pts[1].Y} {dota_pts[2].X} {dota_pts[2].Y} {dota_pts[3].X} {dota_pts[3].Y} {cls} {0}\r\n";
                 }
 
-                //src.ImWrite(f.FullName.Replace(".xml", ".png"));
+                //Cv2.ImShow("dis", dis);
+                //Cv2.WaitKey();
 
-                Cv2.ImShow("dis", dis);
-                Cv2.WaitKey(1);
-
-                var path_images = Path.Join(dir, $@"out\images");
-                var path_labels = Path.Join(dir, $@"out\labels");
-                Directory.CreateDirectory(path_images);
-                Directory.CreateDirectory(path_labels);
-
-                File.WriteAllText(Path.Join(path_labels, f.Name.Replace(".xml", ".txt")), dotalabel);
-                src.ImSave(Path.Join(path_images, f.Name.Replace(".xml", ".png")));
+                var ss = JsonConvert.SerializeObject(aa);
+                XmlDocument xml_ = JsonConvert.DeserializeXmlNode(ss);
+                xml_.Save($@"D:\桌面\out (2)\{f.Name}");
             }
         }
     }

@@ -7,7 +7,7 @@ using work.test;
 
 namespace AIDatasetsPro.src
 {
-    internal class test_基于模板匹配的自动标注 : ConsoleTestBase
+    internal class test_XRay基于模板匹配的自动标注 : ConsoleTestBase
     {
         public override void RunTest()
         {
