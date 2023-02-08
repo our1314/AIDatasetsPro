@@ -1,4 +1,5 @@
-﻿using HalconDotNet;
+﻿using AIDatasetsPro.core;
+using HalconDotNet;
 using OpenCvSharp;
 using work;
 using work.cv;
@@ -12,13 +13,12 @@ namespace AIDatasetsPro.src
         public override void RunTest()
         {
             var @namespace = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Namespace;
+
             Console.WriteLine("输入类名：");
 
             var className = $"{@namespace}.{Console.ReadLine().Trim()}";
-            var type = Type.GetType($"{@namespace}.{className}");
-            var obj = type.Assembly.CreateInstance(className);
-
-            var ic = new xray_sot23e();//new xray_sod523();//new xray_juanpan_ncc();//new xray_sot23e();// new xray_sod323();//new xray_juanpan_ncc();//new xray_juanpan();//new xray_sc88();//
+            var type = Type.GetType(className);
+            var ic = (IIc)type.Assembly.CreateInstance(className);
             var data_dir_path = ic.data_dir_path;
             var img_files = new DirectoryInfo(data_dir_path).GetFiles();
             img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
@@ -41,11 +41,13 @@ namespace AIDatasetsPro.src
                 {
                     var x0 = (int)p[0];
                     var y0 = (int)p[1];
-                    var angle = 0d;
-                    var scale = p[3];
+                    var angle = p[2];
+                    var scale = p[4];
+                    var score = p[5];
+
                     angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
-                    CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle, scale);
+                    CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
                     #region 保存ROI
                     {
@@ -75,14 +77,14 @@ namespace AIDatasetsPro.src
         }
     }
 
-    #region 
-    class xray_juanpan : work.cv.TemplateMatch
+    #region 类
+    class xray_juanpan : TemplateMatch, IIc
     {
-        public string data_dir_path = "D:\\桌面\\新建文件夹";
+        public string data_dir_path => "D:\\桌面\\新建文件夹";
         public static double[] region_coord = new[] { 216.825, 777.231, 456.29, 803.118 };
         public static int[] contrast = new[] { 40, 73, 4 };
         public static int mincontrast = 3;
-        public Size size = new(268, 104);//new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(268, 104);//new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_juanpan()
         {
             Mat img_temp = new Mat(@$"D:\桌面\JP\JuanPan__1__152_SW-01_0000.jpg", ImreadModes.Grayscale);
@@ -95,14 +97,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_juanpan_ncc : work.cv.TemplateMatch
+    class xray_juanpan_ncc : TemplateMatch, IIc
     {
         public static double[] region_coord = new[] { 320.551, 1006.42, MathExp.Rad(95.7475), 112.918, 45.7898 };
         //public static int[] contrast = new[] { 12, 24, 4 };
         //public static int mincontrast = 5;
 
-        public string data_dir_path = "D:/桌面/juanpan1";
-        public Size size = new(region_coord[3] * 2, region_coord[4] * 2);
+        public string data_dir_path => "D:/桌面/juanpan1";
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
         public xray_juanpan_ncc()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__106_TEST-01_0000.jpg", ImreadModes.Grayscale);
@@ -114,8 +116,10 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sc88 : work.cv.TemplateMatch
+    class xray_sc88 : TemplateMatch, IIc
     {
+        public string data_dir_path => throw new NotImplementedException();
+        public Size size => throw new NotImplementedException();
         public xray_sc88()
         {
             Mat img_temp = new Mat(@"D:\桌面\LF-SC88\LF-SC70 88-8units-all__1__002_12-6544_0000.jpg", ImreadModes.Grayscale);
@@ -127,8 +131,10 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sc70 : work.cv.TemplateMatch
+    class xray_sc70 : TemplateMatch, IIc
     {
+        public string data_dir_path => throw new NotImplementedException();
+        public Size size => throw new NotImplementedException();
         public xray_sc70()
         {
             Mat img_temp = new Mat(@"D:/桌面/sc70-1212/LF-SC70 88-8units-all__1__009_sc70-1212_0000.jpg", ImreadModes.Grayscale);
@@ -140,14 +146,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sc70_1 : TemplateMatch
+    class xray_sc70_1 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sc70\src_ng";
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sc70\src_ng";
         public static double[] region_coord = new[] { 126.507, 235.61, 240.983, 421.285 };
         public static int[] contrast = new[] { 25, 45, 8 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sc70_1()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SC70 88-8units-clean__1__000_LA23040203-1234_0000.png", ImreadModes.Grayscale);
@@ -188,14 +194,14 @@ namespace AIDatasetsPro.src
         }
         public Size size = new(332.475 - 216.532, 359.287 - 144.976);
     }
-    class xray_sod323 : TemplateMatch
+    class xray_sod323 : TemplateMatch, IIc
     {
-        public string data_dir_path = "D:/桌面/新建文件夹/sod323-111";
+        public string data_dir_path => "D:/桌面/新建文件夹/sod323-111";
         public static double[] region_coord = new[] { 177.491, 236.672, 330.402, 344.531 };
         public static int[] contrast = new[] { 12, 24, 4 };
         public static int mincontrast = 5;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sod323()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOD323-12units-all__1__000_323-111_0000.jpg", ImreadModes.Grayscale);
@@ -209,14 +215,22 @@ namespace AIDatasetsPro.src
         }
 
     }
-    class xray_sot23e : TemplateMatch
+    class xray_sot23e : TemplateMatch, IIc
     {
-        public string data_dir_path = "D:\\桌面\\sot23e";
+        //public string data_dir_path = "\\\\192.168.11.10\\Public\\HuangRX\\X-RAY\\银浆焊 sot23e\\SOT23E-1237";
         public static double[] region_coord = new[] { 316.355, 556.537, 503.409, 662.145 };
         public static int[] contrast = new[] { 19, 26, 4 };
         public static int mincontrast = 3;
+        //public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+
+
+        //Size IIc.size => throw new NotImplementedException();
+
+        public string data_dir_path => "\\\\192.168.11.10\\Public\\HuangRX\\X-RAY\\银浆焊 sot23e\\SOT23E-1237";
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+
         public xray_sot23e()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT23E-12units-all__1__000_SOT23E-1237_0000.jpg", ImreadModes.Grayscale);
@@ -229,14 +243,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class 锡膏检测 : TemplateMatch
+    class 锡膏检测 : TemplateMatch, IIc
     {
-        public string data_dir_path = "\\\\192.168.11.12\\自动化\\刘林\\temp\\aaaaa";
+        public string data_dir_path => "\\\\192.168.11.12\\自动化\\刘林\\temp\\aaaaa";
         public static double[] region_coord = new[] { 226.32, 207.482, 302.414, 265.998 };
         //public static int[] contrast = new[] { 17, 21, 4 };
         //public static int mincontrast = 4;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public 锡膏检测()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\bad_20220929_024907_924_c37541.bmp", ImreadModes.Grayscale);
@@ -249,14 +263,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sod523 : TemplateMatch
+    class xray_sod523 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod523";
+        public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod523";
         public static double[] region_coord = new[] { 294.994, 540.787, 412.348, 616.143 };
         public static int[] contrast = new[] { 15, 27, 4 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sod523()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\1---2-12_034_1.33_FAIL.jpg", ImreadModes.Grayscale);
@@ -269,14 +283,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sod723 : TemplateMatch
+    class xray_sod723 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod723";
+        public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod723";
         public static double[] region_coord = new[] { 184.549, 106.406, 254.157, 218.014 };
         public static int[] contrast = new[] { 16, 39, 4 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sod723()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SC89 SOT723-24units-all__1__000_TEST-01_0000.jpg", ImreadModes.Grayscale);
@@ -289,14 +303,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sod23lc : TemplateMatch
+    class xray_sod23lc : TemplateMatch, IIc
     {
-        public string data_dir_path = @"//192.168.11.10/Public/HuangRX/X-RAY/银浆焊 sot23lc/SOT23LC1237";
+        public string data_dir_path => @"//192.168.11.10/Public/HuangRX/X-RAY/银浆焊 sot23lc/SOT23LC1237";
         public static double[] region_coord = new[] { 334.842, 718.912, 594.006, 857.916 };
         public static int[] contrast = new[] { 12, 21, 8 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sod23lc()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__000_SOT23LC1237_0000.jpg", ImreadModes.Grayscale);
@@ -309,14 +323,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sot23 : TemplateMatch
+    class xray_sot23 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sot23\retrain3\det";
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sot23\retrain3\det";
         public static double[] region_coord = new[] { 399.344, 649.157, 500.396, 901.083 };
         public static int[] contrast = new[] { 12, 21, 8 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot23()
         {
             Mat img_temp = new Mat(@$"{@"\\192.168.11.10\Public\HuangRX\X-RAY\smt sot23\retrain1\det"}\LF-SOT23-9units-clean__1__024_LA23020689-01_0000.jpg", ImreadModes.Grayscale);
@@ -331,14 +345,14 @@ namespace AIDatasetsPro.src
     }
 
     //17.9786, 303.962, 270.159, 438.426
-    class xray_sot25 : TemplateMatch
+    class xray_sot25 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot25\SOT251235";
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot25\SOT251235";
         public static double[] region_coord = new[] { 17.9786, 303.962, 270.159, 438.426 };
         public static int[] contrast = new[] { 12, 21, 8 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot25()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__000_SOT251235_0000.jpg", ImreadModes.Grayscale);
@@ -351,14 +365,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sot25_1 : TemplateMatch
+    class xray_sot25_1 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot25\SOT25 SW";
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot25\SOT25 SW";
         public static double[] region_coord = new[] { 19.9225, 292.365, 267.523, 424.329 };
         public static int[] contrast = new[] { 12, 21, 8 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot25_1()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__000_LA22493927-02_0000.jpg", ImreadModes.Grayscale);
@@ -371,14 +385,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sot26 : TemplateMatch
+    class xray_sot26 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT26 SW";
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT26 SW";
         public static double[] region_coord = new[] { 8.96439, 296.582, 259.153, 434.584 };
         public static int[] contrast = new[] { 20, 41, 8 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot26()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__000_26 SW12_0000.jpg", ImreadModes.Grayscale);
@@ -391,14 +405,14 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sot26_1 : TemplateMatch
+    class xray_sot26_1 : TemplateMatch, IIc
     {
-        public string data_dir_path = @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT261236";
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT261236";
         public static double[] region_coord = new[] { 44.3358, 291.407, 290.211, 427.684 };
         public static int[] contrast = new[] { 20, 41, 8 };
         public static int mincontrast = 3;
 
-        public Size size = new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot26_1()
         {
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__000_SOT261236_0000.jpg", ImreadModes.Grayscale);
@@ -406,6 +420,27 @@ namespace AIDatasetsPro.src
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
             var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
 
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+
+    class xray_sc70_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sc70\2.4SC70-01";
+        public double[] region_coord = new[] { 198.446, 1127.02, MathExp.Rad(-18.4308), 95.5052, 49.2835 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
+        public xray_sc70_juanpan()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__000_2.4SC70-01_0000.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
             Cv2.ImShow("dis", dis);
             Cv2.WaitKey();
             Cv2.DestroyAllWindows();

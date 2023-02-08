@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="our1314.work" Version="1.3.42" />
+    <PackageReference Include="our1314.work" Version="1.3.44" />
   </ItemGroup>
 
 </Project>
