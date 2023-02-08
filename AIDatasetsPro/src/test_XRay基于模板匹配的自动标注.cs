@@ -80,45 +80,7 @@ namespace AIDatasetsPro.src
         }
     }
 
-    #region 类
-    class xray_juanpan : TemplateMatch, IIc
-    {
-        public string data_dir_path => "D:\\桌面\\新建文件夹";
-        public static double[] region_coord = new[] { 216.825, 777.231, 456.29, 803.118 };
-        public static int[] contrast = new[] { 40, 73, 4 };
-        public static int mincontrast = 3;
-        public Size size => new(268, 104);//new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
-        public xray_juanpan()
-        {
-            Mat img_temp = new Mat(@$"D:\桌面\JP\JuanPan__1__152_SW-01_0000.jpg", ImreadModes.Grayscale);
-
-            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
-            var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1, TemplateAngle: 0);
-
-            Cv2.ImShow("dis", dis);
-            Cv2.WaitKey();
-            Cv2.DestroyAllWindows();
-        }
-    }
-    class xray_juanpan_ncc : TemplateMatch, IIc
-    {
-        public static double[] region_coord = new[] { 320.551, 1006.42, MathExp.Rad(95.7475), 112.918, 45.7898 };
-        //public static int[] contrast = new[] { 12, 24, 4 };
-        //public static int mincontrast = 5;
-
-        public string data_dir_path => "D:/桌面/juanpan1";
-        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
-        public xray_juanpan_ncc()
-        {
-            Mat img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__106_TEST-01_0000.jpg", ImreadModes.Grayscale);
-            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);//
-            var dis = CreateNccModel(img_temp, ModelRegion);
-
-            Cv2.ImShow("dis", dis);
-            Cv2.WaitKey(300);
-            Cv2.DestroyAllWindows();
-        }
-    }
+    #region 料片类
     class xray_sc88 : TemplateMatch, IIc
     {
         public string data_dir_path => throw new NotImplementedException();
@@ -428,7 +390,67 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
+    #endregion
 
+    #region 卷盘类
+    class xray_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => "D:\\桌面\\新建文件夹";
+        public static double[] region_coord = new[] { 216.825, 777.231, 456.29, 803.118 };
+        public static int[] contrast = new[] { 40, 73, 4 };
+        public static int mincontrast = 3;
+        public Size size => new(268, 104);//new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_juanpan()
+        {
+            Mat img_temp = new Mat(@$"D:\桌面\JP\JuanPan__1__152_SW-01_0000.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1, TemplateAngle: 0);
+
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+    class xray_juanpan_ncc : TemplateMatch, IIc
+    {
+        public static double[] region_coord = new[] { 320.551, 1006.42, MathExp.Rad(95.7475), 112.918, 45.7898 };
+        //public static int[] contrast = new[] { 12, 24, 4 };
+        //public static int mincontrast = 5;
+
+        public string data_dir_path => "D:/桌面/juanpan1";
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
+        public xray_juanpan_ncc()
+        {
+            Mat img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__106_TEST-01_0000.jpg", ImreadModes.Grayscale);
+            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);//
+            var dis = CreateNccModel(img_temp, ModelRegion);
+
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey(300);
+            Cv2.DestroyAllWindows();
+        }
+    }
+
+    class xray_sot23_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sot23\LA22171622-28";
+        public double[] region_coord = new[] { 131.391, 718.695, MathExp.Rad(-0.266538), 172.6, 66.2477 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
+        public xray_sot23_juanpan()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\SOT23 20210621__1__1713_LA22171622-28_0000.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
     class xray_sc70_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sc70\2.4SC70-01";
