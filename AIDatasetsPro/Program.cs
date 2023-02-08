@@ -9,7 +9,10 @@ namespace AIDatasetsPro
         static void Main(string[] args)
         {
             ITestManager testManager = new ConsoleTestManager();
-
+            testManager.AddTests(
+                "创建数据集",
+                new test_生成目标检测和语义分割数据集()
+            );
             testManager.AddTests(
                 "自动标注",
                 new test_XRay基于模板匹配的自动标注()
@@ -26,7 +29,6 @@ namespace AIDatasetsPro
                 new test_将yolo标签全改为0(),
                 new test_简单图像搜索(),
                 new test_将目录下的图像全部改为指定格式(),
-                new test_生成目标检测和语义分割数据集(),
                 new test_获取目录下的所有文件列表(),
                 new test_将目标文件夹的图像按比例缩放至1024并补零()
             );
