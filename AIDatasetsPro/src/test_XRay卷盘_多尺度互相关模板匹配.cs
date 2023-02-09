@@ -17,12 +17,14 @@ namespace AIDatasetsPro.src
     {
         public override void RunTest()
         {
-            var y = new yy();
+            var ic = new yy();
+            var src1 = new Mat(@"..\..\..\data\1.jpg", ImreadModes.Grayscale);
+            //ic.FindModel(src1, 0.6, 0, out Mat dis1, out _);
 
             var img_files = new DirectoryInfo(@"..\..\..\data").GetFiles();
             img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
 
-            xx ic = new xx(1);
+            //xx ic = new xx(1);
             var anchor = ic.size;
 
             bool MakeBorder = false;
@@ -75,22 +77,63 @@ namespace AIDatasetsPro.src
         }
     }
 
-    class yy
+    class yy:TemplateMatch, IIc
     {
-        
+        public string data_dir_path => _data_dir_path;
+        public Size size => _size;
+
+        string _data_dir_path;
+        Size _size = new Size();
+
+        List<xx> list = new List<xx>();
         public yy()
         {
-            /*
-             * 1、以一定的步长多次缩放图像及其模板位姿，创建多个模板
-             * 2、使用多个模板进行互相关匹配，取分数最高的
-             */
-            List<xx> list = new List<xx>();
             for (double i = 0.7; i <= 1/0.7; i += 0.1)
             {
                 list.Add(new xx(i));
-                //xx x = new xx(i);
             }
+
+            _data_dir_path = list[0].data_dir_path;
+            _size = list[0].size;
         }
+
+        
+
+        public List<double[]> FindModel(Mat Src, double MinScore, int NumMatches, out Mat dis, out Mat mask, int NumLevels = 5, double MaxOverlap = 0.0, string SubPixel = "true", double Greediness = 0.7)
+        {
+            dis = new Mat();
+            mask = new Mat();
+            
+            var scale = new[] { 0.7d, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4 };
+
+            var result = new List<(double,double, List<double[]>)>();
+            for (int i = 0; i < list.Count; i++)
+            {
+                var x = list[i];
+                var r = x.FindModel(Src, 0.6, 0, out dis, out mask);
+                var mean = 0d;
+                if (r != null)
+                {
+                    mean = r.Sum(p => p[4]) / r.Count;
+                }
+                result.Add((scale[i], mean, r));
+            }
+            result = result.OrderByDescending(p => p.Item2).ToList();
+            var max = result.First();
+
+            //List<(double, double, double)> result = new List<(double, double, double)>();
+            //var a = result.Max(p => Math.Sqrt(p.Item1 * p.Item1 + p.Item2 * p.Item2));
+
+            //for(a)
+            var aaa = max.Item3;
+            for (int i = 0; i < aaa.Count; i++)
+            {
+                aaa[i][3] = max.Item1;
+            }
+            return aaa;
+        }
+
+
     }
     class xx : TemplateMatch, IIc
     {
