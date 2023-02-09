@@ -33,7 +33,9 @@ namespace AIDatasetsPro
                 new test_将yolo标签全改为0(),
                 new test_简单图像搜索(),
                 new test_将目录下的图像全部改为指定格式(),
-                new test_获取目录下的所有文件列表()
+                new test_获取目录下的所有文件列表(),
+                new test_XRay卷盘_多尺度互相关模板匹配(),
+                new test_显示dota数据集()
             );
 
             testManager.ShowTestEntrance();
