@@ -8,27 +8,22 @@ namespace AIDatasetsPro.src
     {
         public override void RunTest()
         {
-            //var img_files = new DirectoryInfo(@"..\..\..\data").GetFiles();
-            //img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
+            Console.WriteLine("输入图像文件：");
+            var path = Console.ReadLine().Replace("\"", "");
+            var src = new Mat(path, ImreadModes.Grayscale);
 
-            //foreach (var f in img_files)
-            //{
+            for (int i = 0; i < 50; i++)
+            {
+                var scale_start = 0.7;
+                var scale_end = 1 / 0.7;
 
-            //}
-            var scale_start = 0.7;
-            var scale_end = 1 / 0.7;
+                var scale = scale_start + (scale_end - scale_start) * new Random().NextDouble();
 
-            var ss = scale_end - scale_start;
-            var scale = scale_start + ss * new Random().NextDouble();
-
-            var p = Console.ReadLine().Trim();
-            p = p.Replace("\"", "");
-
-            var img = new Mat(p, ImreadModes.Unchanged);
-            img = img.Resize(new Size(), scale_end, scale_end);
-            var name = Path.GetFileNameWithoutExtension(p);
-            img.ImSave(p.Replace(name, work.Work.Now));
-
+                var img = src.Resize(new Size(), scale, scale);
+                img = img - 100;
+                var name = Path.GetFileNameWithoutExtension(path);
+                img.ImSave(path.Replace(name, work.Work.Now));
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AIDatasetsPro.src;
+using AIDatasetsPro.src2;
 using work.test;
 using work.test.Interfaces;
 
@@ -26,7 +27,8 @@ namespace AIDatasetsPro
                 new test_XRay卷盘_修改XML值(),
                 new test_XRay卷盘_XML转DOTA(),
                 new test_将目标文件夹的图像按比例缩放至1024并补零(),
-                new test_XRay卷盘_多尺度互相关模板匹配()
+                new test_XRay卷盘_多尺度互相关模板匹配(),
+                new test_XRay卷盘_多尺度互相关模板匹配2()
             );
 
             testManager.AddTests(

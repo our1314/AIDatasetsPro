@@ -5,20 +5,16 @@ using work.cv;
 using work.math;
 using work.test;
 
-namespace AIDatasetsPro.src
+namespace AIDatasetsPro.src2
 {
-    internal class test_XRay卷盘_多尺度互相关模板匹配 : ConsoleTestBase
+    internal class test_XRay卷盘_多尺度互相关模板匹配2 : ConsoleTestBase
     {
         public override void RunTest()
         {
-            var ic = new yy();
-            var src1 = new Mat(@"..\..\..\data\1.jpg", ImreadModes.Grayscale);
-            //ic.FindModel(src1, 0.6, 0, out Mat dis1, out _);
-
             var img_files = new DirectoryInfo(@"..\..\..\data").GetFiles();
             img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
 
-            //xx ic = new xx(1);
+            xx ic = new xx(1);
             var anchor = ic.size;
 
             bool MakeBorder = false;
@@ -32,17 +28,17 @@ namespace AIDatasetsPro.src
                     src = src.CopyMakeBorder(border, border, border, border, BorderTypes.Replicate, CV.GetHistMostGray(src));
                 }
 
-                var result_match = ic.FindModel(src, 0.7, 0, out _, out _, MaxOverlap: 0);
+                var result_match = ic.FindModel(src, 0.7, 0, out _, out _);
                 if (result_match == null) continue;
 
                 var str_label = "";
                 foreach (var p in result_match)
                 {
-                    var x0 = MakeBorder ? (int)p[0] - border : (int)p[0];
-                    var y0 = MakeBorder ? (int)p[1] - border : (int)p[1];
                     var angle = p[2];
                     var scale = p[3];
                     var score = p[4];
+                    var x0 = MakeBorder ? (int)p[0] - border : (int)p[0] * scale;
+                    var y0 = MakeBorder ? (int)p[1] - border : (int)p[1] * scale;
 
                     angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
@@ -71,62 +67,6 @@ namespace AIDatasetsPro.src
         }
     }
 
-    class yy : TemplateMatch, IIc
-    {
-        public string data_dir_path => _data_dir_path;
-        public Size size => _size;
-
-        string _data_dir_path;
-        Size _size = new Size();
-
-        List<xx> list = new List<xx>();
-        public yy()
-        {
-            for (double i = 0.7; i <= 1 / 0.7; i += 0.1)
-            {
-                list.Add(new xx(i));
-            }
-
-            _data_dir_path = list[0].data_dir_path;
-            _size = list[0].size;
-        }
-
-
-
-        public List<double[]> FindModel(Mat Src, double MinScore, int NumMatches, out Mat dis, out Mat mask, int NumLevels = 5, double MaxOverlap = 0.0, string SubPixel = "true", double Greediness = 0.7)
-        {
-            dis = new Mat();
-            mask = new Mat();
-
-            var scale = new[] { 0.7d, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4 };
-
-            var result = new List<(double, double, List<double[]>)>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                var x = list[i];
-                var r = x.FindModel(Src, 0.6, 0, out dis, out mask);
-                var mean = 0d;
-                if (r != null)
-                {
-                    mean = r.Sum(p => p[4]) / r.Count;
-                }
-                result.Add((scale[i], mean, r));
-            }
-            result = result.OrderByDescending(p => p.Item2).ToList();
-            var max = result.First();
-
-            //List<(double, double, double)> result = new List<(double, double, double)>();
-            //var a = result.Max(p => Math.Sqrt(p.Item1 * p.Item1 + p.Item2 * p.Item2));
-
-            //for(a)
-            var aaa = max.Item3;
-            for (int i = 0; i < aaa.Count; i++)
-            {
-                aaa[i][3] = max.Item1;
-            }
-            return aaa;
-        }
-    }
     class xx : TemplateMatch, IIc
     {
         public string data_dir_path => @"..\..\..\data";
@@ -135,6 +75,7 @@ namespace AIDatasetsPro.src
         public int[] contrast = new[] { 40, 73, 4 };
         public int mincontrast = 20;
         public Size size => new Size(region_coord[3] * 2, region_coord[4] * 2);
+        double[] scale = new[] { 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7 };
 
         public xx(double f)
         {
@@ -147,6 +88,37 @@ namespace AIDatasetsPro.src
             //Cv2.ImShow("dis", dis);
             //Cv2.WaitKey(1);
             //Cv2.DestroyAllWindows();
+        }
+
+        public List<double[]> FindModel(Mat Src, double MinScore, int NumMatches, out Mat dis, out Mat mask)
+        {
+            var img = new Mat();
+            var result = new List<(double, double, List<double[]>)>();
+            dis = new Mat();
+            mask = new Mat();
+
+            for (int i = 0; i < scale.Length; i++)
+            {
+                var f = scale[i];
+                img = Src.Resize(new Size(), f, f);
+                var r = base.FindModel(img, 0.1, 0, out dis, out mask);
+
+                var mean = 0d;
+                if (r != null)
+                {
+                    mean = r.Sum(p => p[4]) / r.Count;
+                }
+                result.Add((scale[i], mean, r));
+            }
+
+            result = result.OrderByDescending(p => p.Item2).ToList();
+            var max = result.First();
+            var aaa = max.Item3;
+            for (int i = 0; i < aaa.Count; i++)
+            {
+                aaa[i][3] = 1 / max.Item1;
+            }
+            return aaa;
         }
     }
 }
