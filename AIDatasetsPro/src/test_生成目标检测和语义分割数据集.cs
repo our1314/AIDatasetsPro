@@ -27,7 +27,7 @@ namespace AIDatasetsPro.src
             var files_back = files.Where(f => f.Name.Contains("back")).ToArray();
 
             // 生成图像的总数
-            var cnt_sum = 100;
+            var cnt_sum = 10;
 
             // 每张背景图的贴图数量
             var cnt_perimg = 1;
@@ -61,7 +61,7 @@ namespace AIDatasetsPro.src
 
                     bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
                     mask.CopyTo(back_mask[rect], mask);//将mask贴在同样尺寸的黑色图像上                    
-                    color_mask.SetTo(new Scalar(0,0,128), back_mask);
+                    color_mask.SetTo(new Scalar(0, 0, 128), back_mask);
 
                     //4、计算label
                     double x1 = col;
@@ -84,15 +84,7 @@ namespace AIDatasetsPro.src
                 color_mask.ImSave(@$"{path_masks}\{name}.png");
 
                 //6、显示
-                var dis = back.Clone();
-                var max = Math.Max(dis.Width, dis.Height);
-                var dsize = 1000.0;
-                if (max > dsize)
-                {
-                    double fx = dsize / max;
-                    dis = dis.Resize(new Size(), fx, fx);
-                }
-                Cv2.ImShow("dis", dis);
+                CV.ImShow("dis", back);
                 Cv2.WaitKey(1);
             }
 
@@ -111,6 +103,27 @@ namespace AIDatasetsPro.src
 
             File.WriteAllText(@$"{path}\out\train.txt", train.Trim());
             File.WriteAllText(@$"{path}\out\val.txt", val.Trim());
+
+
+            #region 随机验证
+            {
+                var image_files = Directory.GetFiles(path_images);
+                var image_masks = Directory.GetFiles(path_masks);
+
+                for (int i = 0; i < 5; i++)
+                {
+                    var rand_index = new Random().Next(0, image_files.Length);
+                    var img = new Mat(image_files[rand_index], ImreadModes.Color);
+                    var mask = new Mat(image_masks[rand_index], ImreadModes.Color);
+                    mask.SetTo(Scalar.Red, mask);
+
+                    img = img * 0.5 + mask * 0.5;
+                    CV.ImShow("dis", img);
+                    Cv2.WaitKey(200);
+                }
+            }
+            #endregion
+
             Cv2.DestroyAllWindows();
         }
     }
