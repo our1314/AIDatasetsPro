@@ -27,7 +27,7 @@ namespace AIDatasetsPro.src
             var files_back = files.Where(f => f.Name.Contains("back")).ToArray();
 
             // 生成图像的总数
-            var cnt_sum = 10;
+            var cnt_sum = 100;
 
             // 每张背景图的贴图数量
             var cnt_perimg = 1;
@@ -40,7 +40,7 @@ namespace AIDatasetsPro.src
                 var index_back = new Random().Next(files_fore.Length);
                 var back = new Mat(files_back[index_back].FullName, ImreadModes.Color);
                 var back_mask = back.EmptyClone().CvtColor(ColorConversionCodes.BGR2GRAY);
-
+                var color_mask = back.EmptyClone();
                 for (int j = 0; j < cnt_perimg; j++)
                 {
                     //1、随机获取前景图
@@ -60,7 +60,8 @@ namespace AIDatasetsPro.src
                     var rect = new Rect(col, row, fore.Cols, fore.Rows);
 
                     bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
-                    mask.CopyTo(back_mask[rect], mask);//将mask贴在同样尺寸的黑色图像上
+                    mask.CopyTo(back_mask[rect], mask);//将mask贴在同样尺寸的黑色图像上                    
+                    color_mask.SetTo(new Scalar(0,0,128), back_mask);
 
                     //4、计算label
                     double x1 = col;
@@ -77,9 +78,10 @@ namespace AIDatasetsPro.src
 
                 //5、保存
                 var name = work.Work.Now;
-                back.ImSave(@$"{path_images}\{name}.png");
+                back.ImSave(@$"{path_images}\{name}.jpg");
                 result_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
-                back_mask.ImSave(@$"{path_masks}\{name}.png");
+                //back_mask.ImSave(@$"{path_masks}\{name}.png");
+                color_mask.ImSave(@$"{path_masks}\{name}.png");
 
                 //6、显示
                 var dis = back.Clone();
@@ -94,6 +96,22 @@ namespace AIDatasetsPro.src
                 Cv2.WaitKey(1);
             }
 
+            Cv2.DestroyAllWindows();
+
+            var files_list = new DirectoryInfo(path_images).GetFiles().ToList();
+            string train = "", val = "";
+            var thr = (int)(files_list.Count * 0.7);
+            for (int i = 0; i < files_list.Count; i++)
+            {
+                if (i < thr)
+                    train += Path.GetFileNameWithoutExtension(files_list[i].Name) + "\r\n";
+                else
+                    val += Path.GetFileNameWithoutExtension(files_list[i].Name) + "\r\n";
+            }
+
+            File.WriteAllText(@$"{path}\out\train.txt", train.Trim());
+            File.WriteAllText(@$"{path}\out\val.txt", val.Trim());
+            Cv2.DestroyAllWindows();
         }
     }
 }
