@@ -27,7 +27,7 @@ namespace AIDatasetsPro.src
             var files_back = files.Where(f => f.Name.Contains("back")).ToArray();
 
             // 生成图像的总数
-            var cnt_sum = 10;
+            var cnt_sum = 100;
 
             // 每张背景图的贴图数量
             var cnt_perimg = 1;
