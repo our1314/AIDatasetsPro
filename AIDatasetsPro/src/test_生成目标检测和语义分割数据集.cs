@@ -41,6 +41,7 @@ namespace AIDatasetsPro.src
                 var back = new Mat(files_back[index_back].FullName, ImreadModes.Color);
                 var back_mask = back.EmptyClone().CvtColor(ColorConversionCodes.BGR2GRAY);
                 var color_mask = back.EmptyClone();
+
                 for (int j = 0; j < cnt_perimg; j++)
                 {
                     //1、随机获取前景图
@@ -78,6 +79,21 @@ namespace AIDatasetsPro.src
 
                 //5、保存
                 var name = work.Work.Now;
+
+                {
+                    back = back.Resize(new Size(), 0.3, 0.3);
+                    var maxlen = Math.Max(back.Width, back.Height);
+                    var padup = (maxlen - back.Height) / 2;
+                    var padleft = (maxlen - back.Width) / 2;
+                    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+
+                    color_mask = color_mask.Resize(new Size(), 0.3, 0.3, InterpolationFlags.Nearest);
+                    maxlen = Math.Max(color_mask.Width, color_mask.Height);
+                    padup = (maxlen - color_mask.Height) / 2;
+                    padleft = (maxlen - color_mask.Width) / 2;
+                    color_mask = color_mask.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                }
+
                 back.ImSave(@$"{path_images}\{name}.jpg");
                 result_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
                 //back_mask.ImSave(@$"{path_masks}\{name}.png");
