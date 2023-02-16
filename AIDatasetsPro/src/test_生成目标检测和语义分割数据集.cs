@@ -27,9 +27,10 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 创建相关目录
-            var path_images = @$"{path}\out\images";
-            var path_labels = @$"{path}\out\labels";
-            var path_masks = @$"{path}\out\masks";
+            var path_root = @$"{path}\out\train";
+            var path_images = @$"{path_root}\images";
+            var path_labels = @$"{path_root}\labels";
+            var path_masks = @$"{path_root}\masks";
             Directory.CreateDirectory(path_images);
             Directory.CreateDirectory(path_labels);
             Directory.CreateDirectory(path_masks);
@@ -126,8 +127,8 @@ namespace AIDatasetsPro.src
                     val += Path.GetFileNameWithoutExtension(files_list[i].Name) + "\r\n";
             }
 
-            File.WriteAllText(@$"{path}\out\train.txt", train.Trim());
-            File.WriteAllText(@$"{path}\out\val.txt", val.Trim());
+            File.WriteAllText(@$"{path_root}\train.txt", train.Trim());
+            File.WriteAllText(@$"{path_root}\val.txt", val.Trim());
 
 
             #region 随机验证

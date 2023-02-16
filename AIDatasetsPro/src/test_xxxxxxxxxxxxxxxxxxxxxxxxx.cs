@@ -10,7 +10,11 @@ namespace AIDatasetsPro.src
         {
             Console.WriteLine("输入图像文件：");
             var path = Console.ReadLine().Replace("\"", "");
-            var src = new Mat(path, ImreadModes.Grayscale);
+            var src = new Mat(path, ImreadModes.Unchanged);
+
+            Console.WriteLine($"Channels：{src.Channels()}");
+
+            return;
 
             for (int i = 0; i < 50; i++)
             {
