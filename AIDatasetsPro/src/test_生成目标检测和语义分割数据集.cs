@@ -10,8 +10,8 @@ namespace AIDatasetsPro.src
         {
             #region 参数设置
             // 生成图像的总数
-            var cnt_sum = 100;
-
+            var cnt_sum = 40;
+            
             // 每张背景图的贴图数量
             var cnt_perimg = 1;
 
@@ -20,6 +20,8 @@ namespace AIDatasetsPro.src
             //                         new Scalar(128, 128, 128)};
 
             var colors = new[] { 1 };
+
+            var train_val_test = new[] { 0.5, 0.2, 0.3 };
             #endregion
 
 
@@ -29,13 +31,13 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 创建相关目录
-            var path_root = @$"{path}\out\train1";
+            var path_root = @$"{path}\out\val";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
-            Directory.CreateDirectory(path_images);
-            Directory.CreateDirectory(path_labels);
-            Directory.CreateDirectory(path_masks);
+            //Directory.CreateDirectory(path_images);
+            //Directory.CreateDirectory(path_labels);
+            //Directory.CreateDirectory(path_masks);
 
             // 提取前景图和背景图的文件名
             var files = new DirectoryInfo(path).GetFiles();
@@ -89,21 +91,21 @@ namespace AIDatasetsPro.src
 
                 //5、保存
                 #region 保存前Resize至目标尺寸
-                {
-                    var f = 512d / Math.Max(back.Width, back.Height);
+                //{
+                //    var f = 512d / Math.Max(back.Width, back.Height);
 
-                    back = back.Resize(new Size(), f, f);
-                    var maxlen = Math.Max(back.Width, back.Height);
-                    var padup = (maxlen - back.Height) / 2;
-                    var padleft = (maxlen - back.Width) / 2;
-                    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                //    back = back.Resize(new Size(), f, f);
+                //    var maxlen = Math.Max(back.Width, back.Height);
+                //    var padup = (maxlen - back.Height) / 2;
+                //    var padleft = (maxlen - back.Width) / 2;
+                //    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
 
-                    black = black.Resize(new Size(), f, f, InterpolationFlags.Nearest);
-                    maxlen = Math.Max(black.Width, black.Height);
-                    padup = (maxlen - black.Height) / 2;
-                    padleft = (maxlen - black.Width) / 2;
-                    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
-                }
+                //    black = black.Resize(new Size(), f, f, InterpolationFlags.Nearest);
+                //    maxlen = Math.Max(black.Width, black.Height);
+                //    padup = (maxlen - black.Height) / 2;
+                //    padleft = (maxlen - black.Width) / 2;
+                //    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                //}
                 #endregion
 
                 var name = work.Work.Now;
