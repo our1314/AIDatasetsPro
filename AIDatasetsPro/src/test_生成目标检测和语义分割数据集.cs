@@ -21,7 +21,7 @@ namespace AIDatasetsPro.src
 
             var colors = new[] { 1 };
 
-            var train_val_test = new[] { 0.5, 0.2, 0.3 };
+            //var train_val_test = new[] { 0.5, 0.2, 0.3 };
             #endregion
 
 
