@@ -9,10 +9,11 @@ namespace AIDatasetsPro.src
         public override void RunTest()
         {
             Console.WriteLine("输入图像文件：");
-            var path = Console.ReadLine().Replace("\"", "");
+            var path = Console.ReadLine();//.Replace("\"", "");
             var src = new Mat(path, ImreadModes.Unchanged);
+            Cv2.MinMaxLoc(src, out double min, out double max);
 
-            Console.WriteLine($"Channels：{src.Channels()}");
+            Console.WriteLine($"Channels:{src.Channels()}, min:{min},max:{max}");
 
             return;
 

@@ -15,9 +15,11 @@ namespace AIDatasetsPro.src
             // 每张背景图的贴图数量
             var cnt_perimg = 1;
 
-            var colors = new[] { new Scalar(0, 0, 128), new Scalar(0, 128, 0), new Scalar(128, 0, 0),
-                                     new Scalar(0, 128, 128), new Scalar(128, 0, 128), new Scalar(128, 128, 0),
-                                     new Scalar(128, 128, 128)};
+            //var colors = new[] { new Scalar(0, 0, 1), new Scalar(0, 128, 0), new Scalar(128, 0, 0),
+            //                         new Scalar(0, 128, 128), new Scalar(128, 0, 128), new Scalar(128, 128, 0),
+            //                         new Scalar(128, 128, 128)};
+
+            var colors = new[] { 1 };
             #endregion
 
 
@@ -27,7 +29,7 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 创建相关目录
-            var path_root = @$"{path}\out\train";
+            var path_root = @$"{path}\out\train1";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
@@ -47,9 +49,9 @@ namespace AIDatasetsPro.src
                 var gen_yolo_labels = "";
 
                 // 0、随机获取一张背景图
-                var index_back = new Random().Next(files_fore.Length);
+                var index_back = new Random().Next(files_back.Length);
                 var back = new Mat(files_back[index_back].FullName, ImreadModes.Color);//背景图像
-                var black = back.EmptyClone().SetTo(0);//与背景图同样尺寸的黑色图像
+                var black = back.EmptyClone().CvtColor(ColorConversionCodes.BGR2GRAY).SetTo(0);//与背景图同样尺寸的黑色图像
 
                 for (int j = 0; j < cnt_perimg; j++)
                 {
@@ -110,7 +112,9 @@ namespace AIDatasetsPro.src
                 black.ImSave(@$"{path_masks}\{name}.png");
 
                 //6、显示
-                CV.ImShow("dis", back);
+                var dis = back.Clone();
+                dis.PutText($"{black.Channels()}", new Point(0, 100), HersheyFonts.Italic, 2, Scalar.Red, 3);
+                CV.ImShow("dis", dis);
                 Cv2.WaitKey(1);
             }
 
@@ -142,6 +146,7 @@ namespace AIDatasetsPro.src
                     var img = new Mat(image_files[rand_index], ImreadModes.Color);
                     var mask = new Mat(image_masks[rand_index], ImreadModes.Color);
                     mask.SetTo(Scalar.Red, mask);
+                    //Cv2.MinMaxLoc(mask, out double min, out double max);
 
                     img = img * 0.5 + mask * 0.5;
                     CV.ImShow("dis", img);
