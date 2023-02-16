@@ -31,7 +31,7 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 创建相关目录
-            var path_root = @$"{path}\out\val";
+            var path_root = @$"{path}\out\val11";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
@@ -73,9 +73,18 @@ namespace AIDatasetsPro.src
                     var rect = new Rect(col, row, fore.Cols, fore.Rows);
 
                     //4、生成目标图像和同尺寸的mask图像
-                    bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
-                    black[rect].SetTo(colors[j], mask);//
+                    {
+                        //bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
+                        //black[rect].SetTo(colors[j], mask);//
+                    }
 
+                    {
+                        black[rect].SetTo(colors[j], mask);//
+
+                        Cv2.AddWeighted(back, 1, black, 0.7, 0, back);
+                        back = back.GaussianBlur(new Size(3, 3), 7);
+                        
+                    }
                     //5、计算yolo标签
                     double x1 = col;
                     double y1 = row;
