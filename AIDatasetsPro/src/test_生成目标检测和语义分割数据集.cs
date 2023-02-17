@@ -31,7 +31,7 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 创建相关目录
-            var path_root = @$"{path}\out\val11";
+            var path_root = @$"{path}\out\xxx";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
@@ -79,9 +79,12 @@ namespace AIDatasetsPro.src
                     }
 
                     {
+                        back = back.CvtColor(ColorConversionCodes.BGR2GRAY);
+
                         black[rect].SetTo(colors[j], mask);//
 
-                        Cv2.AddWeighted(back, 1, black, 0.7, 0, back);
+                        back = back - 85 * black;
+                        //Cv2.AddWeighted(back, 1, black*-85, 0.7, 0, back);
                         back = back.GaussianBlur(new Size(3, 3), 7);
                         
                     }
