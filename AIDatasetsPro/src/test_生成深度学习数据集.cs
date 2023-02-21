@@ -4,7 +4,7 @@ using work.test;
 
 namespace AIDatasetsPro.src
 {
-    internal class test_生成目标检测和语义分割数据集 : ConsoleTestBase
+    internal class test_生成深度学习数据集 : ConsoleTestBase
     {
         enum 数据集类型
         {
