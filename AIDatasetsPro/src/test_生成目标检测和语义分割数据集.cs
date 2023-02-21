@@ -71,18 +71,18 @@ namespace AIDatasetsPro.src
 
                     //4、生成目标图像和同尺寸的mask图像
                     {
-                        //bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
-                        //black[rect].SetTo(colors[j], mask);//
+                        bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
+                        black[rect].SetTo(colors[j], mask);//
                     }
 
                     {
-                        back = back.CvtColor(ColorConversionCodes.BGR2GRAY);
+                        //back = back.CvtColor(ColorConversionCodes.BGR2GRAY);
 
-                        black[rect].SetTo(colors[j], mask);//
+                        //black[rect].SetTo(colors[j], mask);//
 
-                        back = back - 85 * black;
-                        //Cv2.AddWeighted(back, 1, black*-85, 0.7, 0, back);
-                        back = back.GaussianBlur(new Size(3, 3), 7);
+                        //back = back - 85 * black;
+                        ////Cv2.AddWeighted(back, 1, black*-85, 0.7, 0, back);
+                        //back = back.GaussianBlur(new Size(3, 3), 7);
                         
                     }
                     //5、计算yolo标签
@@ -104,33 +104,75 @@ namespace AIDatasetsPro.src
                     var f = 256d / Math.Max(back.Width, back.Height);
 
                     back = back.Resize(new Size(), f, f);
-                    var maxlen = Math.Max(back.Width, back.Height);
-                    var padup = (maxlen - back.Height) / 2;
-                    var padleft = (maxlen - back.Width) / 2;
-                    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                    //var maxlen = Math.Max(back.Width, back.Height);
+                    //var padup = (maxlen - back.Height) / 2;
+                    //var padleft = (maxlen - back.Width) / 2;
+                    //back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
 
                     black = black.Resize(new Size(), f, f, InterpolationFlags.Nearest);
-                    maxlen = Math.Max(black.Width, black.Height);
-                    padup = (maxlen - black.Height) / 2;
-                    padleft = (maxlen - black.Width) / 2;
-                    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                    //maxlen = Math.Max(black.Width, black.Height);
+                    //padup = (maxlen - black.Height) / 2;
+                    //padleft = (maxlen - black.Width) / 2;
+                    //black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                }
+
+                var gray = 0;
+                {
+                    back = back.CvtColor(ColorConversionCodes.BGR2GRAY);
+
+
+                    var k = 2;
+                    var data = new Mat();
+                    back.ConvertTo(data, MatType.CV_32F);
+                    data = data.Reshape(0, data.Width * data.Height);
+                    var label = new Mat();
+                    Cv2.Kmeans(data, k, label, new TermCriteria(CriteriaTypes.MaxIter, 1000, 0.0001), attempts: 10, KMeansFlags.RandomCenters);
+
+                    //2、将聚类结果转换为图像形状
+                    label = label.Reshape(0, back.Rows);
+
+                    var cls1 = new Mat(back.Size(), MatType.CV_16S, 0);
+                    var cls2 = new Mat(back.Size(), MatType.CV_16S, 0);
+
+                    Mat mask1 = label - 0;
+                    mask1 = mask1.Abs();
+                    mask1 = mask1.ConvertScaleAbs();
+
+                    back.CopyTo(cls1, mask1);
+
+                    Mat mask2 = label - 1;
+                    mask2 = mask2.Abs();
+                    mask2 = mask2.ConvertScaleAbs();
+
+                    back.CopyTo(cls2, mask2);
+                    cls1.FindNonZero().GetArray(out byte[] a1);
+                    cls2.FindNonZero().GetArray(out byte[] a2);
+                    var m1 = back.Mean(mask1);
+                    var m2 = cls2.Mean(mask2);
+                    Cv2.ImShow("cls1", cls1);
+                    Cv2.WaitKey();
+
+                    Cv2.ImShow("cls2", cls2);
+                    Cv2.WaitKey();
+                    gray = (int)Math.Max(m1.Val0, m2.Val0);
+
                 }
 
                 {
                     var padup = (256 - back.Height) / 2;
                     var padleft = (256 - back.Width) / 2;
-                    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant, gray);
 
                     padup = (256 - black.Height) / 2;
                     padleft = (256 - black.Width) / 2;
-                    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant, gray);
                 }
                 #endregion
 
-                var name = work.Work.Now;
-                back.ImSave(@$"{path_images}\{name}.jpg");
-                gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
-                black.ImSave(@$"{path_masks}\{name}.png");
+                //var name = work.Work.Now;
+                //back.ImSave(@$"{path_images}\{name}.jpg");
+                //gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
+                //black.ImSave(@$"{path_masks}\{name}.png");
 
                 //6、显示
                 var dis = back.Clone();
