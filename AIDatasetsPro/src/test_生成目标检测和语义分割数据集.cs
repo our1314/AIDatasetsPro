@@ -10,8 +10,8 @@ namespace AIDatasetsPro.src
         {
             #region 参数设置
             // 生成图像的总数
-            var cnt_sum = 30;
-            
+            var cnt_sum = 40;
+
             // 每张背景图的贴图数量
             var cnt_perimg = 1;
 
@@ -21,7 +21,7 @@ namespace AIDatasetsPro.src
 
             var colors = new[] { 1 };
 
-            //var train_val_test = new[] { 0.5, 0.2, 0.3 };
+            var train_val_test = new[] { 0.5, 0.2, 0.3 };
             #endregion
 
 
@@ -31,10 +31,13 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 创建相关目录
-            var path_root = @$"{path}\out\test";
+            var path_root = @$"{path}\out\val11";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
+            //Directory.CreateDirectory(path_images);
+            //Directory.CreateDirectory(path_labels);
+            //Directory.CreateDirectory(path_masks);
 
             // 提取前景图和背景图的文件名
             var files = new DirectoryInfo(path).GetFiles();
@@ -70,20 +73,16 @@ namespace AIDatasetsPro.src
                     var rect = new Rect(col, row, fore.Cols, fore.Rows);
 
                     //4、生成目标图像和同尺寸的mask图像
+                    //直接贴图
                     {
-                        bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
-                        black[rect].SetTo(colors[j], mask);//
-                    }
-
-                    {
-                        //back = back.CvtColor(ColorConversionCodes.BGR2GRAY);
-
+                        //bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
                         //black[rect].SetTo(colors[j], mask);//
-
-                        //back = back - 85 * black;
-                        ////Cv2.AddWeighted(back, 1, black*-85, 0.7, 0, back);
-                        //back = back.GaussianBlur(new Size(3, 3), 7);
-                        
+                    }
+                    //前景背景融合
+                    {
+                        black[rect].SetTo(colors[j], mask);
+                        Cv2.AddWeighted(back, 1, black, 0.7, 0, back);
+                        back = back.GaussianBlur(new Size(3, 3), 7);
                     }
                     //5、计算yolo标签
                     double x1 = col;
@@ -100,83 +99,31 @@ namespace AIDatasetsPro.src
 
                 //5、保存
                 #region 保存前Resize至目标尺寸
-                {
-                    var f = 256d / Math.Max(back.Width, back.Height);
+                //{
+                //    var f = 512d / Math.Max(back.Width, back.Height);
 
-                    back = back.Resize(new Size(), f, f);
-                    //var maxlen = Math.Max(back.Width, back.Height);
-                    //var padup = (maxlen - back.Height) / 2;
-                    //var padleft = (maxlen - back.Width) / 2;
-                    //back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                //    back = back.Resize(new Size(), f, f);
+                //    var maxlen = Math.Max(back.Width, back.Height);
+                //    var padup = (maxlen - back.Height) / 2;
+                //    var padleft = (maxlen - back.Width) / 2;
+                //    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
 
-                    black = black.Resize(new Size(), f, f, InterpolationFlags.Nearest);
-                    //maxlen = Math.Max(black.Width, black.Height);
-                    //padup = (maxlen - black.Height) / 2;
-                    //padleft = (maxlen - black.Width) / 2;
-                    //black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
-                }
-
-                var gray = 0;
-                {
-                    back = back.CvtColor(ColorConversionCodes.BGR2GRAY);
-
-
-                    var k = 2;
-                    var data = new Mat();
-                    back.ConvertTo(data, MatType.CV_32F);
-                    data = data.Reshape(0, data.Width * data.Height);
-                    var label = new Mat();
-                    Cv2.Kmeans(data, k, label, new TermCriteria(CriteriaTypes.MaxIter, 1000, 0.0001), attempts: 10, KMeansFlags.RandomCenters);
-
-                    //2、将聚类结果转换为图像形状
-                    label = label.Reshape(0, back.Rows);
-
-                    var cls1 = new Mat(back.Size(), MatType.CV_16S, 0);
-                    var cls2 = new Mat(back.Size(), MatType.CV_16S, 0);
-
-                    Mat mask1 = label - 0;
-                    mask1 = mask1.Abs();
-                    mask1 = mask1.ConvertScaleAbs();
-
-                    back.CopyTo(cls1, mask1);
-
-                    Mat mask2 = label - 1;
-                    mask2 = mask2.Abs();
-                    mask2 = mask2.ConvertScaleAbs();
-
-                    back.CopyTo(cls2, mask2);
-                    cls1.FindNonZero().GetArray(out byte[] a1);
-                    cls2.FindNonZero().GetArray(out byte[] a2);
-                    var m1 = back.Mean(mask1);
-                    var m2 = cls2.Mean(mask2);
-                    Cv2.ImShow("cls1", cls1);
-                    Cv2.WaitKey();
-
-                    Cv2.ImShow("cls2", cls2);
-                    Cv2.WaitKey();
-                    gray = (int)Math.Max(m1.Val0, m2.Val0);
-
-                }
-
-                {
-                    var padup = (256 - back.Height) / 2;
-                    var padleft = (256 - back.Width) / 2;
-                    back = back.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant, gray);
-
-                    padup = (256 - black.Height) / 2;
-                    padleft = (256 - black.Width) / 2;
-                    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant, gray);
-                }
+                //    black = black.Resize(new Size(), f, f, InterpolationFlags.Nearest);
+                //    maxlen = Math.Max(black.Width, black.Height);
+                //    padup = (maxlen - black.Height) / 2;
+                //    padleft = (maxlen - black.Width) / 2;
+                //    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
+                //}
                 #endregion
 
-                //var name = work.Work.Now;
-                //back.ImSave(@$"{path_images}\{name}.jpg");
-                //gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
-                //black.ImSave(@$"{path_masks}\{name}.png");
+                var name = work.Work.Now;
+                back.ImSave(@$"{path_images}\{name}.jpg");
+                gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
+                black.ImSave(@$"{path_masks}\{name}.png");
 
                 //6、显示
                 var dis = back.Clone();
-                //dis.PutText($"{black.Channels()}", new Point(0, 100), HersheyFonts.Italic, 2, Scalar.Red, 3);
+                dis.PutText($"{black.Channels()}", new Point(0, 100), HersheyFonts.Italic, 2, Scalar.Red, 3);
                 CV.ImShow("dis", dis);
                 Cv2.WaitKey(1);
             }
