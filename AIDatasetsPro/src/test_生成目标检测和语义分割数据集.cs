@@ -6,6 +6,11 @@ namespace AIDatasetsPro.src
 {
     internal class test_生成目标检测和语义分割数据集 : ConsoleTestBase
     {
+        enum 数据集类型
+        {
+            目标检测,
+            超分辨率重构
+        }
         public override void RunTest()
         {
             #region 参数设置
@@ -22,6 +27,8 @@ namespace AIDatasetsPro.src
             var colors = new[] { 1 };
 
             var train_val_test = new[] { 0.5, 0.2, 0.3 };
+
+            数据集类型 type = 数据集类型.超分辨率重构;
             #endregion
 
 
@@ -35,6 +42,10 @@ namespace AIDatasetsPro.src
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
+
+            var path_super = @$"{path_root}\super";
+            var path_super_images = @$"{path_super}\images";
+            var path_super_labels = @$"{path_super}\labels";
             //Directory.CreateDirectory(path_images);
             //Directory.CreateDirectory(path_labels);
             //Directory.CreateDirectory(path_masks);
@@ -73,16 +84,16 @@ namespace AIDatasetsPro.src
                     var rect = new Rect(col, row, fore.Cols, fore.Rows);
 
                     //4、生成目标图像和同尺寸的mask图像
-                    //直接贴图
+                    //方式一：直接贴图
                     {
-                        //bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
-                        //black[rect].SetTo(colors[j], mask);//
+                        bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
+                        black[rect].SetTo(colors[j], mask);//
                     }
-                    //前景背景融合
+                    //方式二：前景背景融合
                     {
-                        black[rect].SetTo(colors[j], mask);
-                        Cv2.AddWeighted(back, 1, black, 0.7, 0, back);
-                        back = back.GaussianBlur(new Size(3, 3), 7);
+                        //black[rect].SetTo(colors[j], mask);
+                        //Cv2.AddWeighted(back, 1, black, 0.7, 0, back);
+                        //back = back.GaussianBlur(new Size(3, 3), 7);
                     }
                     //5、计算yolo标签
                     double x1 = col;
@@ -117,9 +128,18 @@ namespace AIDatasetsPro.src
                 #endregion
 
                 var name = work.Work.Now;
-                back.ImSave(@$"{path_images}\{name}.jpg");
-                gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
-                black.ImSave(@$"{path_masks}\{name}.png");
+                if (type == 数据集类型.目标检测)
+                {
+                    back.ImSave(@$"{path_images}\{name}.jpg");//原图像
+                    gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");//yololable
+                    black.ImSave(@$"{path_masks}\{name}.png");
+                }
+                else if (type == 数据集类型.超分辨率重构)
+                {
+                    back.ImSave(@$"{path_super_labels}\{name}.png");
+                    Mat aaa = back.GaussianBlur(new Size(15, 15), 7, 7);
+                    aaa.ImSave(@$"{path_super_images}\{name}.png");
+                }
 
                 //6、显示
                 var dis = back.Clone();
