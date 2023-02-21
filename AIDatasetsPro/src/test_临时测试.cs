@@ -4,7 +4,7 @@ using work.test;
 using static System.Math;
 namespace AIDatasetsPro.src
 {
-    internal class test_xxxxxxxxxxxxxxxxxxxxxxxxx : ConsoleTestBase
+    internal class test_临时测试 : ConsoleTestBase
     {
         public override void RunTest()
         {

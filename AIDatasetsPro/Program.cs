@@ -12,8 +12,9 @@ namespace AIDatasetsPro
             ITestManager testManager = new ConsoleTestManager();
             testManager.AddTests(
                 "创建数据集",
+                new test_临时测试(),
                 new test_生成目标检测和语义分割数据集(),
-                new test_xxxxxxxxxxxxxxxxxxxxxxxxx(),
+                new test_生成超分辨率重构数据集(),
                 new test_查看语义分割数据集()
             );
 
