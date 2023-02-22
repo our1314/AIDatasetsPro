@@ -88,6 +88,7 @@ namespace AIDatasetsPro.src
                         //Cv2.AddWeighted(back, 1, black, 0.7, 0, back);
                         //back = back.GaussianBlur(new Size(3, 3), 7);
                     }
+
                     //5、计算yolo标签
                     double x1 = col;
                     double y1 = row;
