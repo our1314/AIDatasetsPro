@@ -38,17 +38,10 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 创建相关目录
-            var path_root = @$"{path}\out\val11";
+            var path_root = @$"{path}\out\super";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
-
-            var path_super = @$"{path_root}\super";
-            var path_super_images = @$"{path_super}\images";
-            var path_super_labels = @$"{path_super}\labels";
-            //Directory.CreateDirectory(path_images);
-            //Directory.CreateDirectory(path_labels);
-            //Directory.CreateDirectory(path_masks);
 
             // 提取前景图和背景图的文件名
             var files = new DirectoryInfo(path).GetFiles();
@@ -133,12 +126,31 @@ namespace AIDatasetsPro.src
                     back.ImSave(@$"{path_images}\{name}.jpg");//原图像
                     gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");//yololable
                     black.ImSave(@$"{path_masks}\{name}.png");
+
+                    #region 生成VOC数据集需要的train.txt,val.txt
+                    {
+                        var files_list = new DirectoryInfo(path_images).GetFiles().ToList();
+                        string train = "", val = "";
+                        var thr = (int)(files_list.Count * 0.7);
+                        for (int j = 0; j < files_list.Count; j++)
+                        {
+                            if (j < thr)
+                                train += Path.GetFileNameWithoutExtension(files_list[j].Name) + "\r\n";
+                            else
+                                val += Path.GetFileNameWithoutExtension(files_list[j].Name) + "\r\n";
+                        }
+
+                        File.WriteAllText(@$"{path_root}\train.txt", train.Trim());
+                        File.WriteAllText(@$"{path_root}\val.txt", val.Trim());
+                    }
+                    #endregion
                 }
                 else if (type == 数据集类型.超分辨率重构)
                 {
-                    back.ImSave(@$"{path_super_labels}\{name}.png");
-                    Mat aaa = back.GaussianBlur(new Size(15, 15), 7, 7);
-                    aaa.ImSave(@$"{path_super_images}\{name}.png");
+                    var sigma = 7;//方差
+                    back.ImSave(@$"{path_labels}\{name}.png");
+                    Mat aaa = back.GaussianBlur(new Size(2 * sigma + 1, 2 * sigma + 1), 7, 7);
+                    aaa.ImSave(@$"{path_images}\{name}.png");
                 }
 
                 //6、显示
@@ -150,22 +162,11 @@ namespace AIDatasetsPro.src
 
             Cv2.DestroyAllWindows();
 
-            var files_list = new DirectoryInfo(path_images).GetFiles().ToList();
-            string train = "", val = "";
-            var thr = (int)(files_list.Count * 0.7);
-            for (int i = 0; i < files_list.Count; i++)
-            {
-                if (i < thr)
-                    train += Path.GetFileNameWithoutExtension(files_list[i].Name) + "\r\n";
-                else
-                    val += Path.GetFileNameWithoutExtension(files_list[i].Name) + "\r\n";
-            }
-
-            File.WriteAllText(@$"{path_root}\train.txt", train.Trim());
-            File.WriteAllText(@$"{path_root}\val.txt", val.Trim());
+            
 
 
             #region 随机验证
+            if (type == 数据集类型.目标检测)
             {
                 var image_files = Directory.GetFiles(path_images);
                 var image_masks = Directory.GetFiles(path_masks);
