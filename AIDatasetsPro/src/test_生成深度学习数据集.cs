@@ -118,6 +118,10 @@ namespace AIDatasetsPro.src
                 //    padleft = (maxlen - black.Width) / 2;
                 //    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
                 //}
+                {
+                    back = back.Resize(new Size(256, 94));
+                    black = black.Resize(new Size(256, 94));
+                }
                 #endregion
 
                 var name = work.Work.Now;
