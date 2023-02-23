@@ -8,19 +8,29 @@ namespace AIDatasetsPro.src
     {
         public override void RunTest()
         {
-            var x1 = new Mat(@"D:\desktop\aaaa\1.png", ImreadModes.Grayscale);
-            var x2 = new Mat(@"D:\desktop\aaaa\2.png", ImreadModes.Grayscale);
-
-            x1.ConvertTo(x1, MatType.CV_64FC1);
-            x2.ConvertTo(x2, MatType.CV_64FC1);
+            var x1 = new Mat(@"D:\desktop\1.png", ImreadModes.Grayscale);
+            var x2 = new Mat(@"D:\desktop\2.png", ImreadModes.Grayscale);
 
             Mat off = x1 - x2;
-            off.MinMaxLoc(out double min1, out double max1);
             off = off.Normalize(0, 255, NormTypes.MinMax);
             off = off.ConvertScaleAbs();
             Cv2.ImShow("off", off);
             Cv2.WaitKey();
             return;
+
+            //var x1 = new Mat(@"D:\desktop\aaaa\1.png", ImreadModes.Grayscale);
+            //var x2 = new Mat(@"D:\desktop\aaaa\2.png", ImreadModes.Grayscale);
+
+            //x1.ConvertTo(x1, MatType.CV_64FC1);
+            //x2.ConvertTo(x2, MatType.CV_64FC1);
+
+            //Mat off = x1 - x2;
+            //off.MinMaxLoc(out double min1, out double max1);
+            //off = off.Normalize(0, 255, NormTypes.MinMax);
+            //off = off.ConvertScaleAbs();
+            //Cv2.ImShow("off", off);
+            //Cv2.WaitKey();
+            //return;
 
 
             var p = new Mat(3, 3, MatType.CV_64FC1, new double[,]
