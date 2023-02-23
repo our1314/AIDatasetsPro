@@ -15,7 +15,7 @@ namespace AIDatasetsPro.src
         {
             #region 参数设置
             // 生成图像的总数
-            var cnt_sum = 50;
+            var cnt_sum = 100;
 
             // 每张背景图的贴图数量
             var cnt_perimg = 1;
@@ -37,8 +37,8 @@ namespace AIDatasetsPro.src
 
             var path = Console.ReadLine().Trim();
 
-            // 创建相关目录
-            var path_root = @$"{path}\out\super_test";
+            // 目录
+            var path_root = @$"{path}\out\super_train";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
@@ -120,8 +120,9 @@ namespace AIDatasetsPro.src
                 //    black = black.CopyMakeBorder(padup, padup, padleft, padleft, BorderTypes.Constant);
                 //}
                 {
-                    back = back.Resize(new Size(256, 94));
-                    black = black.Resize(new Size(256, 94));
+                    var f = 256d / 94d;
+                    back = back.Resize(new Size((int)(f * 256), (int)(f * 94)));
+                    black = black.Resize(new Size((int)(f * 256), (int)(f * 94)));
                 }
                 #endregion
 
