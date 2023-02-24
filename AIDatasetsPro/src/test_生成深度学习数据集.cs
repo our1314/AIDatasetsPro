@@ -24,11 +24,13 @@ namespace AIDatasetsPro.src
             //                         new Scalar(0, 128, 128), new Scalar(128, 0, 128), new Scalar(128, 128, 0),
             //                         new Scalar(128, 128, 128)};
 
-            var colors = new[] { 1 };
+            var colors = new[] { 255 };
 
             var train_val_test = new[] { 0.5, 0.2, 0.3 };
 
-            数据集类型 type = 数据集类型.超分辨率重构;
+            数据集类型 type = 数据集类型.目标检测;
+            //var 图像通道数 = 3;
+            //var Mask通道数 = 3;
             #endregion
 
 
@@ -38,7 +40,7 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();
 
             // 目录
-            var path_root = @$"{path}\out\super_train";
+            var path_root = @$"{path}\out\train3";
             var path_images = @$"{path_root}\images";
             var path_labels = @$"{path_root}\labels";
             var path_masks = @$"{path_root}\masks";
@@ -79,14 +81,15 @@ namespace AIDatasetsPro.src
                     //4、生成目标图像和同尺寸的mask图像
                     //方式一：直接贴图
                     {
-                        bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
-                        black[rect].SetTo(colors[j], mask);//
+                        //bgr.CopyTo(back[rect], mask);//将前景图贴在背景图上
+                        //black[rect].SetTo(colors[j], mask);//
                     }
-                    //方式二：前景背景融合
+                    //方式二：前景背景融合，添加高斯噪声
                     {
-                        //black[rect].SetTo(colors[j], mask);
-                        //Cv2.AddWeighted(back, 1, black, 0.7, 0, back);
-                        //back = back.GaussianBlur(new Size(3, 3), 7);
+                        black[rect].SetTo(colors[j], mask);
+                        
+                        Cv2.AddWeighted(back, 1, black.CvtColor(ColorConversionCodes.GRAY2BGR), -0.5, 0, back);
+                        back = back.GaussianBlur(new Size(3, 3), 7);
                     }
 
                     //5、计算yolo标签

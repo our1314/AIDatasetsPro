@@ -8,15 +8,32 @@ namespace AIDatasetsPro.src
     {
         public override void RunTest()
         {
-            var x1 = new Mat(@"D:\desktop\3.png", ImreadModes.Grayscale);
-            var x2 = new Mat(@"D:\desktop\2.png", ImreadModes.Grayscale);
+            var files = new DirectoryInfo(@"D:\work\files\deeplearn_datasets\test_datasets\xray_real\masks").GetFiles();
+            foreach(var file in files) 
+            {
+                var img = new Mat(file.FullName, ImreadModes.Grayscale);
+                var bin = img.Threshold(1, 255, ThresholdTypes.BinaryInv);
+                
+                bin.ImSave(file.FullName.Replace("masks", "masks1"));
 
-            Mat off = x1 - x2;
-            off = off.Normalize(0, 255, NormTypes.MinMax);
-            off = off.ConvertScaleAbs();
-            Cv2.ImShow("off", off);
-            Cv2.WaitKey();
-            return;
+                var dis = new Mat();
+                Cv2.HConcat(img, bin, dis);
+                Cv2.ImShow("dis", dis);
+                Cv2.WaitKey(100);
+            }
+
+            Cv2.DestroyAllWindows();
+            
+
+            //var x1 = new Mat(@"D:\desktop\3.png", ImreadModes.Grayscale);
+            //var x2 = new Mat(@"D:\desktop\2.png", ImreadModes.Grayscale);
+
+            //Mat off = x1 - x2;
+            //off = off.Normalize(0, 255, NormTypes.MinMax);
+            //off = off.ConvertScaleAbs();
+            //Cv2.ImShow("off", off);
+            //Cv2.WaitKey();
+            //return;
 
             //var x1 = new Mat(@"D:\desktop\aaaa\1.png", ImreadModes.Grayscale);
             //var x2 = new Mat(@"D:\desktop\aaaa\2.png", ImreadModes.Grayscale);
