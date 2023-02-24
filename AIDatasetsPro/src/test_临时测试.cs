@@ -8,7 +8,7 @@ namespace AIDatasetsPro.src
     {
         public override void RunTest()
         {
-            var x1 = new Mat(@"D:\desktop\1.png", ImreadModes.Grayscale);
+            var x1 = new Mat(@"D:\desktop\3.png", ImreadModes.Grayscale);
             var x2 = new Mat(@"D:\desktop\2.png", ImreadModes.Grayscale);
 
             Mat off = x1 - x2;
