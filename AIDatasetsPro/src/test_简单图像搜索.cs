@@ -71,6 +71,7 @@ namespace AIDatasetsPro.src
             dis.PutText(images[0].FullName, new Point(0, dis.Height - 10), HersheyFonts.HersheyComplex, 0.3, Scalar.Red, 1);
             Cv2.ImShow(images[0].Name, dis);
             Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
         }
     }
 }

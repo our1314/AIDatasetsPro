@@ -20,7 +20,8 @@ namespace AIDatasetsPro
 
             testManager.AddTests(
                 "自动标注",
-                new test_XRay基于模板匹配的自动标注()
+                new test_XRay基于模板匹配的自动标注(),
+                new tool_标注样条曲线()
             );
 
             testManager.AddTests(
