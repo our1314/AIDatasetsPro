@@ -8,22 +8,50 @@ namespace AIDatasetsPro.src
     {
         public override void RunTest()
         {
-            var files = new DirectoryInfo(@"D:\work\files\deeplearn_datasets\test_datasets\xray_real\masks").GetFiles();
-            foreach(var file in files) 
+            var image_files = new DirectoryInfo(@"D:\work\files\deeplearn_datasets\test_datasets\xray_real\images").GetFiles().ToList();
+            var mask_files = new DirectoryInfo(@"D:\work\files\deeplearn_datasets\test_datasets\xray_real\masks").GetFiles().ToList();
+            for(int i=0; i<image_files.Count;i++)
             {
-                var img = new Mat(file.FullName, ImreadModes.Grayscale);
-                var bin = img.Threshold(1, 255, ThresholdTypes.BinaryInv);
-                
-                bin.ImSave(file.FullName.Replace("masks", "masks1"));
+                var img = new Mat(image_files[i].FullName, ImreadModes.Grayscale);
+                var mask = new Mat(mask_files[i].FullName, ImreadModes.Grayscale);
 
-                var dis = new Mat();
-                Cv2.HConcat(img, bin, dis);
-                Cv2.ImShow("dis", dis);
+                Mat dst = img - mask;
+
+                //var bin = img.Threshold(1, 255, ThresholdTypes.BinaryInv);
+                dst.ImSave(image_files[i].FullName.Replace("images", "images1"));
+
+                Cv2.ImShow("dis", dst);
                 Cv2.WaitKey(100);
             }
 
             Cv2.DestroyAllWindows();
+
+
+            //var files = new DirectoryInfo(@"D:\work\files\deeplearn_datasets\test_datasets\xray_real\masks").GetFiles();
+            //foreach(var file in files) 
+            //{
+            //    var img = new Mat(file.FullName, ImreadModes.Grayscale);
+            //    var bin = img.Threshold(1, 255, ThresholdTypes.BinaryInv);
+                
+            //    bin.ImSave(file.FullName.Replace("masks", "masks1"));
+
+            //    var dis = new Mat();
+            //    Cv2.HConcat(img, bin, dis);
+            //    Cv2.ImShow("dis", dis);
+            //    Cv2.WaitKey(100);
+            //}
+
+            //Cv2.DestroyAllWindows();
             
+
+
+
+
+
+
+
+
+
 
             //var x1 = new Mat(@"D:\desktop\3.png", ImreadModes.Grayscale);
             //var x2 = new Mat(@"D:\desktop\2.png", ImreadModes.Grayscale);
