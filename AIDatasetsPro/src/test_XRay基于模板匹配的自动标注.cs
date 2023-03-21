@@ -26,18 +26,19 @@ namespace AIDatasetsPro.src
             HOperatorSet.SetSystem("border_shape_models", "true");
             var anchor = ic.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
 
-            bool MakeBorder = false;
+            bool MakeBorder = true;//修改
             int border = 300;
             foreach (var f in img_files)
             {
                 Mat src = new Mat(f.FullName, ImreadModes.Grayscale);
+                var temp = src.Clone();
                 var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
                 if (MakeBorder)
                 {
-                    src = src.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(src));
+                    temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
                 }
                 
-                var result_match = ic.FindModel(src, 0.7, 0, out _, out _, MaxOverlap: 0);
+                var result_match = ic.FindModel(temp, 0.7, 0, out _, out _, MaxOverlap: 0);
                 if (result_match == null) continue;
 
                 var str_label = "";
@@ -63,10 +64,10 @@ namespace AIDatasetsPro.src
                     var classname = ic.GetType().Name;
                     if (!classname.Contains("juanpan"))
                     {
-                        var cx = (double)x0 / src.Width;
-                        var cy = (double)y0 / src.Height;
-                        var w = (double)anchor1.Width / src.Width;
-                        var h = (double)anchor1.Height / src.Height;
+                        var cx = (double)x0 / temp.Width;
+                        var cy = (double)y0 / temp.Height;
+                        var w = (double)anchor1.Width / temp.Width;
+                        var h = (double)anchor1.Height / temp.Height;
 
                         str_label += $"0 {cx} {cy} {w} {h}\r\n";
                     }
@@ -494,6 +495,27 @@ namespace AIDatasetsPro.src
             var img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__000_2.4 SC88-01_0000.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+    class xray_sot23lc_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\卷盘 SOT23LC";
+        public double[] region_coord = new[] { 165.017, 1157.89, 259.483, 1413.93 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3]- region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_sot23lc_juanpan()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\sot23lc.jpg", ImreadModes.Grayscale);
+
+            //HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
             //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
             var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
             Cv2.ImShow("dis", dis);
