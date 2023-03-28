@@ -26,7 +26,8 @@ namespace AIDatasetsPro.src
             HOperatorSet.SetSystem("border_shape_models", "true");
             var anchor = ic.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
 
-            bool MakeBorder = true;//修改
+
+            bool MakeBorder = className.Contains("juanpan") ? true : false;
             int border = 300;
             foreach (var f in img_files)
             {
@@ -401,7 +402,28 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
+    class xray_sot26_2 : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sot26_juanpan";
+        public static double[] region_coord = new[] { 336.959, 652.485, 610.185, 913.941 };
+        public static int[] contrast = new[] { 20, 41, 8 };
+        public static int mincontrast = 3;
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_sot26_2()
+        {
+            Mat img_temp = new Mat(@$"{data_dir_path}\a.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
+
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
     #endregion
+
 
     #region 卷盘类
     class xray_juanpan : TemplateMatch, IIc
