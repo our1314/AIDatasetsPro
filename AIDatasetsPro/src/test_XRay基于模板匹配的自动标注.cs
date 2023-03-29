@@ -404,7 +404,7 @@ namespace AIDatasetsPro.src
     }
     class xray_sot26_2 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sot26_juanpan";
+        public string data_dir_path => @"D:\desktop\SOT26";
         public static double[] region_coord = new[] { 336.959, 652.485, 610.185, 913.941 };
         public static int[] contrast = new[] { 20, 41, 8 };
         public static int mincontrast = 3;
