@@ -402,9 +402,27 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    
 
-    
+
+    class xray_dfn_1610 : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\DFN\DFN1610";
+        public static double[] region_coord = new[] { 44.3358, 291.407, 290.211, 427.684 };
+        public static int[] contrast = new[] { 20, 41, 8 };
+        public static int mincontrast = 3;
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_dfn_1610()
+        {
+            Mat img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, 213.019, 261.933, 322.282, 452.218);
+            var dis = CreateScaledShapeModel(img_temp, ModelRegion, new[] { 13, 19, 9 }, 5, scaleMin: 0.9, scaleMax: 1.1);
+
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
     #endregion
 
 
@@ -574,7 +592,7 @@ namespace AIDatasetsPro.src
 
     class xray_sot26_2_juanpan : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\SOT26-lp";
+        public string data_dir_path => @"D:\desktop\xray\误报率高\LA23124275-12";
         public double[] region_coord = new[] { 473.574, 787.358, MathExp.Rad(-88.971), 130, 130 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
@@ -582,7 +600,7 @@ namespace AIDatasetsPro.src
         public Size size => new(region_coord[4] * 2, region_coord[3] * 2);
         public xray_sot26_2_juanpan()
         {
-            var img_temp = new Mat(@$"{data_dir_path}\a.jpg", ImreadModes.Grayscale);
+            var img_temp = new Mat(@$"D:\desktop\xray\SOT26-lp-1\a.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
             //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
