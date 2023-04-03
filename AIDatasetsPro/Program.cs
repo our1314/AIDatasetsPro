@@ -36,6 +36,7 @@ namespace AIDatasetsPro
 
             testManager.AddTests(
                 "tools",
+                new test_手动标注工具(),
                 new test_删除XRay_C2文件夹内的无效链接(),
                 new test_将yolo标签全改为0(),
                 new test_简单图像搜索(),

@@ -38,8 +38,8 @@ namespace AIDatasetsPro.src
                 {
                     temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
                 }
-                
-                var result_match = ic.FindModel(temp, 0.7, 0, out _, out _, MaxOverlap: 0);
+
+                var result_match = ic.FindModel(temp, 0.7, 0, out _, out _, MaxOverlap: 0.1);
                 if (result_match == null) continue;
 
                 var str_label = "";
@@ -47,7 +47,7 @@ namespace AIDatasetsPro.src
                 {
                     var x0 = MakeBorder ? (int)p[0] - border : (int)p[0];
                     var y0 = MakeBorder ? (int)p[1] - border : (int)p[1];
-                    var angle = p[2];
+                    var angle = 0d;// p[2];
                     var scale = p[3];
                     var score = p[4];
 
@@ -70,7 +70,7 @@ namespace AIDatasetsPro.src
                         var w = (double)anchor1.Width / src.Width;
                         var h = (double)anchor1.Height / src.Height;
 
-                        str_label += $"0 {Math.Round(cx,6)} {Math.Round(cy, 6)} {Math.Round(w, 6)} {Math.Round(h, 6)}\r\n";
+                        str_label += $"0 {Math.Round(cx, 6)} {Math.Round(cy, 6)} {Math.Round(w, 6)} {Math.Round(h, 6)}\r\n";
                     }
                     else
                     {
@@ -403,21 +403,126 @@ namespace AIDatasetsPro.src
         }
     }
 
+    //class xray_dfn_1610 : TemplateMatch, IIc
+    //{
+    //    public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\DFN\DFN1610";
+    //    public static double[] region_coord = new[] { 238.915, 805.225, 424.296, 928.626 };
+    //    public static int[] contrast = new[] { 8, 50, 20 };
+    //    public static int mincontrast = 10;
 
-    class xray_dfn_1610 : TemplateMatch, IIc
+    //    public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+    //    public xray_dfn_1610()
+    //    {
+    //        Mat img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
+
+    //        HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+    //        var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
+
+    //        Cv2.ImShow("dis", dis);
+    //        Cv2.WaitKey();
+    //        Cv2.DestroyAllWindows();
+    //    }
+    //}
+    //349,162,428,280
+
+    //class xray_dfn_SOD882 : TemplateMatch, IIc
+    //{
+    //    public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\DFN\SOD882";
+    //    public static double[] region_coord = new[] { 162d, 349d, 280d, 428d };
+    //    public static int[] contrast = new[] { 8, 50, 20 };
+    //    public static int mincontrast = 10;
+
+    //    public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+    //    public xray_dfn_SOD882()
+    //    {
+    //        Mat img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
+
+    //        HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+    //        var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
+
+    //        Cv2.ImShow("dis", dis);
+    //        Cv2.WaitKey();
+    //        Cv2.DestroyAllWindows();
+    //    }
+    //}
+
+    class xray_dfn_SOD0603 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\DFN\DFN1610";
-        public static double[] region_coord = new[] { 44.3358, 291.407, 290.211, 427.684 };
-        public static int[] contrast = new[] { 20, 41, 8 };
-        public static int mincontrast = 3;
+        public string data_dir_path => @"D:\desktop\dfn\DFN0603";
+        public double[] region_coord = new[] { 149d, 379d, 240d, 433d };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
 
         public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
-        public xray_dfn_1610()
+        public xray_dfn_SOD0603()
         {
-            Mat img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
-            HOperatorSet.GenRectangle1(out HObject ModelRegion, 213.019, 261.933, 322.282, 452.218);
-            var dis = CreateScaledShapeModel(img_temp, ModelRegion, new[] { 13, 19, 9 }, 5, scaleMin: 0.9, scaleMax: 1.1);
+            var img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
 
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+    class xray_dfn_DFN1610 : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\dfn\DFN1610";
+        public double[] region_coord = new[] { 52d, 308, 237, 432 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_dfn_DFN1610()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+    //
+    class xray_dfn_SOD882 : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\dfn\SOD882";
+        public double[] region_coord = new[] { 162d, 193, 281, 270 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_dfn_SOD882()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+
+    class xray_dfn_SOD883 : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\dfn\SOT883";
+        public double[] region_coord = new[] { 196d, 560d, 309d, 634d };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_dfn_SOD883()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
             Cv2.ImShow("dis", dis);
             Cv2.WaitKey();
             Cv2.DestroyAllWindows();
