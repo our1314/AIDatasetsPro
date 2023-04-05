@@ -47,7 +47,7 @@ namespace AIDatasetsPro.src
                 {
                     var x0 = MakeBorder ? (int)p[0] - border : (int)p[0];
                     var y0 = MakeBorder ? (int)p[1] - border : (int)p[1];
-                    var angle = 0d;// p[2];
+                    var angle = p[2] + 90;
                     var scale = p[3];
                     var score = p[4];
 
@@ -652,26 +652,26 @@ namespace AIDatasetsPro.src
         }
     }
 
-    class xray_sot25_juanpan : TemplateMatch, IIc
-    {
-        public string data_dir_path => @"D:\desktop\xray\sot25";
-        public double[] region_coord = new[] { 239.664, 1033.29, MathExp.Rad(-91.972), 54.458, 129.304 };
-        public int[] contrast = new[] { 20, 41, 8 };
-        public int mincontrast = 3;
+    //class xray_sot25_juanpan : TemplateMatch, IIc
+    //{
+    //    public string data_dir_path => @"D:\desktop\xray\sot25";
+    //    public double[] region_coord = new[] { 239.664, 1033.29, MathExp.Rad(-91.972), 54.458, 129.304 };
+    //    public int[] contrast = new[] { 20, 41, 8 };
+    //    public int mincontrast = 3;
 
-        public Size size => new(region_coord[4] * 2, region_coord[3] * 2);
-        public xray_sot25_juanpan()
-        {
-            var img_temp = new Mat(@$"{data_dir_path}\sot25.jpg", ImreadModes.Grayscale);
+    //    public Size size => new(region_coord[4] * 2, region_coord[3] * 2);
+    //    public xray_sot25_juanpan()
+    //    {
+    //        var img_temp = new Mat(@$"{data_dir_path}\sot25.jpg", ImreadModes.Grayscale);
 
-            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
-            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
-            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
-            Cv2.ImShow("dis", dis);
-            Cv2.WaitKey();
-            Cv2.DestroyAllWindows();
-        }
-    }
+    //        HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+    //        //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+    //        var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
+    //        Cv2.ImShow("dis", dis);
+    //        Cv2.WaitKey();
+    //        Cv2.DestroyAllWindows();
+    //    }
+    //}
 
     //class xray_sot26_2 : TemplateMatch, IIc
     //{
@@ -709,6 +709,68 @@ namespace AIDatasetsPro.src
 
             HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
             //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+
+    //314,1148.5,1,252,91
+    class xray_sot23e_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\xray数据\smt\sot23e";
+        public double[] region_coord = new[] { 314, 1148.5, MathExp.Rad(-91), 91 / 2.0, 252 / 2.0 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
+        public xray_sot23e_juanpan()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__002_LA23E-01_0000.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+
+    //689.5,,5,254,98
+    class xray_sot25_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\xray数据\smt\sot25_juanpan";
+        public double[] region_coord = new[] { 224, 689.5, MathExp.Rad(-95), 106 / 2.0, 256 / 2.0 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
+        public xray_sot25_juanpan()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\sot25.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+    //1140.5,162,1,255,122
+    class xray_sot26_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\xray数据\smt\sot26_juanpan";
+        public double[] region_coord = new[] { 162, 1140.5, MathExp.Rad(-91), 122 / 2.0, 256 / 2.0 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] * 2, region_coord[4] * 2);
+        public xray_sot26_juanpan()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\REEL-X-RAY-ALL__1__002_SOT26-01_0000.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle2(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3], region_coord[4]);
             var dis = CreateNccModel(img_temp, ModelRegion, 0, 180);
             Cv2.ImShow("dis", dis);
             Cv2.WaitKey();
