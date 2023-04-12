@@ -39,7 +39,7 @@ namespace AIDatasetsPro.src
                     temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
                 }
 
-                var result_match = ic.FindModel(temp, 0.7, 0, out _, out _, MaxOverlap: 0.1);
+                var result_match = ic.FindModel(temp, 0.85, 0, out _, out _, MaxOverlap: 0.1);
                 if (result_match == null) continue;
 
                 var str_label = "";
@@ -83,7 +83,7 @@ namespace AIDatasetsPro.src
                 File.WriteAllText(save_path, str_label);
 
                 Cv2.ImShow("dis", dis.PyrDown());
-                Cv2.WaitKey(1);
+                Cv2.WaitKey();
             }
 
             //在目录下保存classes.txt，LabelImg需要此文件。
@@ -448,7 +448,7 @@ namespace AIDatasetsPro.src
 
     class xray_dfn_SOD0603 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\dfn\DFN0603";
+        public string data_dir_path => @"D:\desktop\xray数据\dfn\DFN0603";
         public double[] region_coord = new[] { 149d, 379d, 240d, 433d };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
