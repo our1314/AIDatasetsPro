@@ -43,7 +43,8 @@ namespace AIDatasetsPro
                 new test_将目录下的图像全部改为指定格式(),
                 new test_获取目录下的所有文件列表(),
                 new test_显示dota数据集(),
-                new test_根据图像文件删除多余的标签文件()
+                new test_根据图像文件删除多余的标签文件(),
+                new test_将sot23e的标注尺寸扩大()
             );
 
             testManager.ShowTestEntrance();

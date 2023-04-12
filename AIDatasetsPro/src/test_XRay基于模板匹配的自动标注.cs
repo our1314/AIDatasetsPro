@@ -719,7 +719,7 @@ namespace AIDatasetsPro.src
     //314,1148.5,1,252,91
     class xray_sot23e_juanpan : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\xray数据\smt\sot23e";
+        public string data_dir_path => @"D:\desktop\xray数据\smt\sot23e_juanpan";
         public double[] region_coord = new[] { 314, 1148.5, MathExp.Rad(-91), 91 / 2.0, 252 / 2.0 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
