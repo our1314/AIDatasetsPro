@@ -32,11 +32,13 @@ namespace AIDatasetsPro.src
                 for (int i = 0; i < yolodata.Count; i++)
                 {
                     var data = yolodata[i];
-                    //data[3] = 278d / width;
-                    data[4] = (264d - 20d) / height;
-                    //data[3] = 218d / width;
-                    //data[3] = 218d / width;//254d / height;
-                    //data[4] = (234d-4d) / height;
+
+                    //data[3] = 60d / width;
+                    //data[4] = 102d / height;
+                    //data[2] = data[2] + 1d / height;
+                    data[3] = 62d / width;
+                    data[4] = 104d / height;
+
                     yolodata[i] = data;
                 }
                 var new_yolostr = Base.doublearray2yolostr(yolodata);
