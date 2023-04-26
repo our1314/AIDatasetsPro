@@ -67,7 +67,7 @@ namespace AIDatasetsPro.src
                     var x = src[p1.Y, p2.Y, p1.X, p2.X];
                     Cv2.ImShow("x", x);
 
-                    Console.WriteLine($"{p1.X},{p1.Y},{p2.X},{p2.Y}");
+                    Console.WriteLine($"xyxy:{p1.X},{p1.Y},{p2.X},{p2.Y}");
                 }
                 if(ch==27)//esc
                 {
