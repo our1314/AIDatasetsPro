@@ -13,7 +13,7 @@ namespace AIDatasetsPro
             testManager.AddTests(
                 "创建数据集",
                 new test_临时测试(),
-                new test_生成深度学习数据集(),
+                new test_生成深度学习数据集_随机贴图(),
                 new test_生成超分辨率重构数据集(),
                 new test_查看语义分割数据集()
             );

@@ -26,9 +26,9 @@ namespace AIDatasetsPro.src
              */
 
             #region 0、读取图像
-            //Console.WriteLine("输入需要标注的图像路径：");
-            //var path = Console.ReadLine().Replace("\"", "");
-            var path = @"D:\desktop\2.png";
+            Console.WriteLine("输入需要标注的图像路径：");
+            var path = Console.ReadLine().Replace("\"", "");
+            //var path = @"D:\desktop\2.png";
 
             src = new Mat(path, ImreadModes.Color);
             mask = Mat.Zeros(src.Size(), MatType.CV_8UC3);

@@ -31,15 +31,15 @@ namespace AIDatasetsPro.src
                 var yolodata = Base.yolostr2doublearray(yolo_str);
                 for (int i = 0; i < yolodata.Count; i++)
                 {
-                    var data = yolodata[i];
+                    var (label, x0, y0, w, h) = yolodata[i];
 
                     //data[3] = 60d / width;
                     //data[4] = 102d / height;
                     //data[2] = data[2] + 1d / height;
-                    data[3] = 62d / width;
-                    data[4] = 104d / height;
+                    w = 62d / width;
+                    h = 104d / height;
 
-                    yolodata[i] = data;
+                    yolodata[i] = (label, x0, y0, w, h);
                 }
                 var new_yolostr = Base.doublearray2yolostr(yolodata);
                 new_yolostr.StrSave(label_path);
