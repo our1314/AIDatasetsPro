@@ -194,14 +194,14 @@ namespace AIDatasetsPro.src
             }
             else if (type_数据集类型 == 数据集类型.图像分割)
             {
-                var image_files = Directory.GetFiles(path_images);
-                var image_masks = Directory.GetFiles(path_masks);
+                var list_images = new DirectoryInfo(path_images).GetFiles().Where(f => f.Extension == ".png" || f.Extension == ".jpg" || f.Extension == ".bmp").Select(f=>f.FullName).ToList();
+                var list_masks = Directory.GetFiles(path_masks);
 
                 for (int i = 0; i < 5; i++)
                 {
-                    var rand_index = new Random().Next(0, image_files.Length);
-                    var img = new Mat(image_files[rand_index], ImreadModes.Color);
-                    var mask = new Mat(image_masks[rand_index], ImreadModes.Color);
+                    var rand_index = new Random().Next(0, list_images.Count);
+                    var img = new Mat(list_images[rand_index], ImreadModes.Color);
+                    var mask = new Mat(list_masks[rand_index], ImreadModes.Color);
                     mask.SetTo(Scalar.Red, mask);
                     //Cv2.MinMaxLoc(mask, out double min, out double max);
 
