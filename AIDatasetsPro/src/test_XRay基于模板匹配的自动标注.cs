@@ -21,7 +21,7 @@ namespace AIDatasetsPro.src
             var ic = (IIc)type.Assembly.CreateInstance(className);
             var data_dir_path = ic.data_dir_path;
             var img_files = new DirectoryInfo(data_dir_path).GetFiles();
-            img_files = img_files.Where(f => f.FullName.EndsWith(".jpg") || f.FullName.EndsWith(".bmp") || f.FullName.EndsWith(".png")).ToArray();
+            img_files = img_files.Where(f => f.Extension==".jpg" || f.Extension == ".bmp" || f.Extension == ".png").ToArray();
 
             HOperatorSet.SetSystem("border_shape_models", "true");
             var anchor = ic.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
@@ -39,7 +39,7 @@ namespace AIDatasetsPro.src
                     temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
                 }
 
-                var result_match = ic.FindModel(temp, 0.85, 0, out _, out _, MaxOverlap: 0.1);
+                var result_match = ic.FindModel(temp, 0.85, 0, out _, out _, MaxOverlap: 0);
                 if (result_match == null) continue;
 
                 var str_label = "";
@@ -47,11 +47,11 @@ namespace AIDatasetsPro.src
                 {
                     var x0 = MakeBorder ? (int)p[0] - border : (int)p[0];
                     var y0 = MakeBorder ? (int)p[1] - border : (int)p[1];
-                    var angle = p[2] + 0;
+                    var angle = 0;//p[2] + 0;
                     var scale = p[3];
                     var score = p[4];
 
-                    angle = angle * Math.PI / 180d;
+                    //angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
                     var pts = CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
@@ -80,14 +80,17 @@ namespace AIDatasetsPro.src
                 str_label = str_label.Trim();
 
                 var save_path = f.FullName.Replace(".jpg", ".txt");
-                File.WriteAllText(save_path, str_label);
+                if (!File.Exists(save_path))
+                    File.WriteAllText(save_path, str_label);
 
                 Cv2.ImShow("dis", dis.PyrDown());
                 Cv2.WaitKey(1);
             }
 
             //在目录下保存classes.txt，LabelImg需要此文件。
-            File.WriteAllText(@$"{data_dir_path}\classes.txt", "0");
+            var ff = @$"{data_dir_path}\classes.txt";
+            if (!File.Exists(ff))
+                File.WriteAllText(ff, "0");
         }
     }
 
@@ -468,15 +471,15 @@ namespace AIDatasetsPro.src
 
     class xray_dfn_SOD0603 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\xray数据\dfn\DFN0603";
-        public double[] region_coord = new[] { 149d, 379d, 240d, 433d };
+        public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\dfn0603\train";//D:\desktop\xray数据\dfn\DFN0603
+        public double[] region_coord = new[] { 255,561d, 334, 601  };//{ 149d, 379d, 240d, 433d };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
         public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_dfn_SOD0603()
         {
-            var img_temp = new Mat(@$"{data_dir_path}\01_001_1.0_FAIL.jpg", ImreadModes.Grayscale);
+            var img_temp = new Mat(@$"{data_dir_path}\01_007_1.6_FAIL.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
             //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
@@ -486,6 +489,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
+
     class xray_dfn_DFN1610 : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\dfn\DFN1610";
@@ -506,7 +510,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    //
+    
     class xray_dfn_SOD882 : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\dfn\SOD882";
