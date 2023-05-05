@@ -39,7 +39,7 @@ namespace AIDatasetsPro.src
                     temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
                 }
 
-                var result_match = ic.FindModel(temp, 0.85, 0, out _, out _, MaxOverlap: 0);
+                var result_match = ic.FindModel(temp, 0.45, 0, out _, out _, MaxOverlap: 0);
                 if (result_match == null) continue;
 
                 var str_label = "";
@@ -366,19 +366,20 @@ namespace AIDatasetsPro.src
     }
     class xray_sot25_1 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\sss";
-        public string data_dir_path1 => @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot25\SOT25 SW";
-        public static double[] region_coord = new[] { 19.9225, 292.365, 267.523, 424.329 };
-        public static int[] contrast = new[] { 12, 21, 8 };
+        public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sot25\train";
+        //public string data_dir_path1 => @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot25\SOT25 SW";
+        public static double[] region_coord = new[] { 20d, 309, 269, 438 /*19.9225, 292.365, 267.523, 424.329*/ };
+        public static int[] contrast = new[] { 32, 71, 8 };
         public static int mincontrast = 3;
 
         public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot25_1()
         {
-            Mat img_temp = new Mat(@$"{data_dir_path1}\LF-SOT2526LC-9units-all__1__000_LA22493927-02_0000.jpg", ImreadModes.Grayscale);
+            Mat img_temp = new Mat(@$"D:\work\files\deeplearn_datasets\x-ray\obj-det\sot25\train\LF-SOT2526LC-9units-all__1__000_LA22493927-02_0000.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
             var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
+            HOperatorSet.SetSystem("border_shape_models", "true");
 
             Cv2.ImShow("dis", dis);
             Cv2.WaitKey();
