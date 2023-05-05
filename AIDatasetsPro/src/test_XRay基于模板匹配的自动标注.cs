@@ -408,15 +408,15 @@ namespace AIDatasetsPro.src
     }
     class xray_sot26_1 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\银浆焊 sot26\SOT261236";
-        public static double[] region_coord = new[] { 44.3358, 291.407, 290.211, 427.684 };
+        public string data_dir_path => @"D:\desktop\xray数据\smt1\SOT26-NG";
+        public static double[] region_coord = new[] { 82, 404, 316, 532d };
         public static int[] contrast = new[] { 20, 41, 8 };
         public static int mincontrast = 3;
 
         public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot26_1()
         {
-            Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__000_SOT261236_0000.jpg", ImreadModes.Grayscale);
+            Mat img_temp = new Mat(@$"D:\desktop\xray数据\smt1\SOT26-NG\LF-SOT2526LC-9units-all__1__000_SOT26-01_0000.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
             var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1);
