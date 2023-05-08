@@ -93,6 +93,49 @@ namespace AIDatasetsPro.src
                 File.WriteAllText(ff, "0");
         }
     }
+    #region xray毛刺
+    class xray_毛刺1 : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\xray毛刺检测\TO252样品图片\TO252编带后毛刺废品";
+        public double[] region_coord = new[] { 154d, 3, 295, 413 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_毛刺1()
+        {
+            var img_temp = new Mat(@$"{"D:\\desktop\\xray毛刺检测\\TO252样品图片\\TO252编带好品"}\2.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+
+    class xray_毛刺2 : TemplateMatch, IIc
+    {
+        public string data_dir_path => @"D:\desktop\xray毛刺检测\TO252样品图片\TO252编带好品";
+        public double[] region_coord = new[] { 154d, 3, 295, 413 };
+        public int[] contrast = new[] { 20, 41, 8 };
+        public int mincontrast = 3;
+
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
+        public xray_毛刺2()
+        {
+            var img_temp = new Mat(@$"{data_dir_path}\2.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+    #endregion
 
     #region 料片类
     class xray_sc88 : TemplateMatch, IIc
