@@ -96,7 +96,7 @@ namespace AIDatasetsPro.src
     #region xray毛刺
     class xray_毛刺1 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\xray毛刺检测\TO252样品图片\TO252编带后毛刺废品";
+        public string data_dir_path => @"D:\desktop\xray毛刺检测\TO252样品图片\TO252框架好品";
         public double[] region_coord = new[] { 154d, 3, 295, 413 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
@@ -107,8 +107,8 @@ namespace AIDatasetsPro.src
             var img_temp = new Mat(@$"{"D:\\desktop\\xray毛刺检测\\TO252样品图片\\TO252编带好品"}\2.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
-            //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
-            var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
+            var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
+            //var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
             Cv2.ImShow("dis", dis);
             Cv2.WaitKey();
             Cv2.DestroyAllWindows();
