@@ -26,10 +26,10 @@ namespace AIDatasetsPro.src
 
             #region 1、参数设置
             // 生成图像的总数
-            var cnt_sum = 10;
+            var cnt_sum = 100;
 
             // 每张背景图的最大贴图数量
-            var cnt_perimg_max = 3;
+            var cnt_perimg_max = 1;
 
             //var colors = new[] { new Scalar(0, 0, 1), new Scalar(0, 128, 0), new Scalar(128, 0, 0),
             //                     new Scalar(0, 128, 128), new Scalar(128, 0, 128), new Scalar(128, 128, 0),
@@ -65,6 +65,10 @@ namespace AIDatasetsPro.src
                 // 0、随机获取一张背景图
                 var index_back = new Random().Next(files_back.Length);
                 var back = new Mat(files_back[index_back].FullName, ImreadModes.Color);//背景图像
+                //对背景图进行增强
+                {
+                    
+                }
                 var black = back.EmptyClone().CvtColor(ColorConversionCodes.BGR2GRAY).SetTo(0);//与背景图同样尺寸的黑色图像
 
                 for (int j = 0; j < new Random().Next(1, cnt_perimg_max + 1); j++)
@@ -73,6 +77,18 @@ namespace AIDatasetsPro.src
                     var random_index = new Random().Next(files_fore.Length);
                     var fore = new Mat(files_fore[random_index].FullName, ImreadModes.Unchanged);
 
+                    //对前景图进行数据增强
+                    {
+                        var r = new Random();
+                        fore = CV.RotImage(fore, r.Next(0 - 20, 0 + 20), InterpolationFlags.Linear, BorderTypes.Constant, Scalar.White);
+
+                        var scale = r.NextDouble() * 0.4 + 0.7;
+                        Cv2.Resize(fore, fore, new Size(), scale, scale);
+
+                        //Cv2.ImShow("dis", fore);
+                        //Cv2.WaitKey();
+                    }
+
                     //2、将四通道的前景图拆分出bgr图像和mask图像
                     var fore_chls = fore.Split();
                     var bgr = new Mat();
@@ -80,7 +96,8 @@ namespace AIDatasetsPro.src
                     var mask = fore_chls.Last();
 
                     //3、生成随机坐标
-                    var row = new Random().Next(0, back.Rows - fore.Rows);//不会生成最大值 var row = new Random().Next(112, 328);
+                    //var row = new Random().Next(0, back.Rows - fore.Rows);//不会生成最大值 var row = new Random().Next(112, 328);
+                    var row = new Random().Next(240, 300);//不会生成最大值 var row = new Random().Next(112, 328);
                     var col = new Random().Next(0, back.Cols - fore.Cols);
                     var rect = new Rect(col, row, fore.Cols, fore.Rows);
 
@@ -94,6 +111,7 @@ namespace AIDatasetsPro.src
                         bgr = bgr.Channels() == 1 ? bgr : bgr.CvtColor(ColorConversionCodes.BGR2GRAY);//AddWeighted似乎只能用于单通道图像，若需要三个通道则通道拆分后再融合
                         back = back.Channels() == 1 ? back : back.CvtColor(ColorConversionCodes.BGR2GRAY);
 
+                        
                         Cv2.BitwiseNot(bgr, bgr);//因为当前图像需要的前景是黑色的，因此先进行反色处理
                         Cv2.AddWeighted(back[rect], 1, bgr, -0.1, 0, back[rect]);
                     }
@@ -161,7 +179,7 @@ namespace AIDatasetsPro.src
                 //6、显示
                 var dis = back.Clone();
                 CV.ImShow("dis", dis);
-                Cv2.WaitKey(1);
+                Cv2.WaitKey();
             }
             Cv2.DestroyAllWindows();
 
