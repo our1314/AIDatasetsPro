@@ -27,7 +27,7 @@ namespace AIDatasetsPro.core
             var yolo_str = new List<string>();
             foreach (var data in yolo_data)
             {
-                var temp = $"{data.Item1:F6} {data.Item2:F6} {data.Item3:F6} {data.Item4:F6} {data.Item5:F6}";
+                var temp = $"{data.Item1} {data.Item2:F6} {data.Item3:F6} {data.Item4:F6} {data.Item5:F6}";
                 yolo_str.Add(temp);
             }
             var result = string.Join("\r\n", yolo_str).Trim();

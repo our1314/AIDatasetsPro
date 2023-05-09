@@ -1,5 +1,6 @@
 ﻿using AIDatasetsPro.core;
 using OpenCvSharp;
+using System.Threading.Tasks;
 using work.ai;
 using work.cv;
 using work.test;
@@ -26,7 +27,7 @@ namespace AIDatasetsPro.src
 
             #region 1、参数设置
             // 生成图像的总数
-            var cnt_sum = 100;
+            var cnt_sum = 200;
 
             // 每张背景图的最大贴图数量
             var cnt_perimg_max = 1;
@@ -46,7 +47,7 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();//读取贴图文件路径
 
             // 目录
-            var path_root = @$"{path}\out";
+            var path_root = @$"{path}\out3";
             var path_images = @$"{path_root}\train";//@$"{path_root}\images"
             var path_labels = @$"{path_root}\train";//@$"{path_root}\labels"
             var path_masks = @$"{path_root}\masks";//@$"{path_root}\masks"
@@ -65,11 +66,13 @@ namespace AIDatasetsPro.src
                 // 0、随机获取一张背景图
                 var index_back = new Random().Next(files_back.Length);
                 var back = new Mat(files_back[index_back].FullName, ImreadModes.Color);//背景图像
+                var back_src = back.Clone();
                 //对背景图进行增强
                 {
                     
                 }
                 var black = back.EmptyClone().CvtColor(ColorConversionCodes.BGR2GRAY).SetTo(0);//与背景图同样尺寸的黑色图像
+                var file_name = Path.GetFileNameWithoutExtension(files_back[index_back].FullName);
 
                 for (int j = 0; j < new Random().Next(1, cnt_perimg_max + 1); j++)
                 {
@@ -80,13 +83,12 @@ namespace AIDatasetsPro.src
                     //对前景图进行数据增强
                     {
                         var r = new Random();
-                        fore = CV.RotImage(fore, r.Next(0 - 20, 0 + 20), InterpolationFlags.Linear, BorderTypes.Constant, Scalar.White);
+                        var a = r.Next(2);
+                        var ra = r.Next(a * 90 - 20, a * 90 + 20);
+                        fore = CV.RotImage(fore, ra, InterpolationFlags.Linear, BorderTypes.Constant, Scalar.White);
 
                         var scale = r.NextDouble() * 0.4 + 0.7;
                         Cv2.Resize(fore, fore, new Size(), scale, scale);
-
-                        //Cv2.ImShow("dis", fore);
-                        //Cv2.WaitKey();
                     }
 
                     //2、将四通道的前景图拆分出bgr图像和mask图像
@@ -96,34 +98,69 @@ namespace AIDatasetsPro.src
                     var mask = fore_chls.Last();
 
                     //3、生成随机坐标
-                    //var row = new Random().Next(0, back.Rows - fore.Rows);//不会生成最大值 var row = new Random().Next(112, 328);
-                    var row = new Random().Next(240, 300);//不会生成最大值 var row = new Random().Next(112, 328);
+                    var row = new Random().Next(0, back.Rows - fore.Rows);//不会生成最大值 var row = new Random().Next(112, 328);
                     var col = new Random().Next(0, back.Cols - fore.Cols);
                     var rect = new Rect(col, row, fore.Cols, fore.Rows);
+
+                    var back_clone = new Mat();
 
                     //4、贴图生成目标图像
                     if (type_贴图方式 == 贴图方式.直接贴图)
                     {
-                        bgr.CopyTo(back[rect], mask);//直接将前景图贴在背景图上
+                        bgr.CopyTo(back[rect], mask);//直接将前景图贴在背景图上，png第四通道作为mask
                     }
                     else if (type_贴图方式 == 贴图方式.图像融合)
                     {
                         bgr = bgr.Channels() == 1 ? bgr : bgr.CvtColor(ColorConversionCodes.BGR2GRAY);//AddWeighted似乎只能用于单通道图像，若需要三个通道则通道拆分后再融合
                         back = back.Channels() == 1 ? back : back.CvtColor(ColorConversionCodes.BGR2GRAY);
+                        back_clone = back.Clone();
 
-                        
-                        Cv2.BitwiseNot(bgr, bgr);//因为当前图像需要的前景是黑色的，因此先进行反色处理
-                        Cv2.AddWeighted(back[rect], 1, bgr, -0.1, 0, back[rect]);
+                        var bgr_not = new Mat();
+                        Cv2.BitwiseNot(bgr, bgr_not);//因为当前图像需要的前景是黑色的，因此先进行反色处理
+                        var aaa = -new Random().NextDouble() * 0.3 + -0.1;
+                        //Cv2.AddWeighted(back[rect], 1, bgr_not, -0.1, 0, back[rect]);
+                        Cv2.AddWeighted(back[rect], 1, bgr_not, aaa, 0, back[rect]);
                     }
 
                     //5、生成标签
                     if(type_数据集类型 == 数据集类型.目标检测)
                     {
-                        //生成yolo标签
-                        var (x1, y1, w, h) = (col, row, fore.Cols, fore.Rows);
+                        //将前景图贴上去，再把mask贴上去，再计算boundingbox获取真实label
+                        black[rect].SetTo(255, mask);
+                        var mask1 = getmask1(back);
+                        var xxx = black.SetTo(0, mask1);
+
+                        var rect1 = Cv2.BoundingRect(xxx);
+                        if (rect1.X == 0 || rect1.Y == 0 || rect1.Width == 0 || rect1.Height == 0) continue;
+
+                        var (x1, y1, w, h) = (rect1.X, rect1.Y, (double)rect1.Width, (double)rect1.Height);
                         var (cx, cy) = (x1 + w / 2.0, y1 + h / 2.0);//贴图中心坐标
                         var label_yolo = $"0 {(cx / back.Width):F6} {(cy / back.Height):F6} {(w / back.Width):F6} {(h / back.Height):F6}";
                         gen_yolo_labels += label_yolo + "\r\n";
+
+                        //var labels = new Mat();
+                        //var xx = Cv2.ConnectedComponentsEx(xxx, PixelConnectivity.Connectivity4);
+
+                        //foreach(var ll in xx.Blobs)
+                        //{
+                        //    if (ll.Rect.X==0) continue;
+                        //    var rect1 = ll.Rect;//
+
+                        //    var (x1, y1, w, h) = (rect1.X, rect1.Y, (double)rect1.Width, (double)rect1.Height);
+                        //    var (cx, cy) = (x1 + w / 2.0, y1 + h / 2.0);//贴图中心坐标
+                        //    var label_yolo = $"0 {(cx / back.Width):F6} {(cy / back.Height):F6} {(w / back.Width):F6} {(h / back.Height):F6}";
+                        //    gen_yolo_labels += label_yolo + "\r\n";
+                        //}
+
+
+                        //Cv2.ImShow("xxx", xxx);
+                        //Cv2.WaitKey();
+
+                        //生成yolo标签
+                        //var (x1, y1, w, h) = (col, row, (double)fore.Cols, (double)fore.Rows);
+                        //var (cx, cy) = (x1 + w / 2.0, y1 + h / 2.0);//贴图中心坐标
+                        //var label_yolo = $"0 {(cx / back.Width):F6} {(cy / back.Height):F6} {(w / back.Width):F6} {(h / back.Height):F6}";
+                        //gen_yolo_labels += label_yolo + "\r\n";
                     }
                     else if(type_数据集类型 == 数据集类型.图像分割)
                     {
@@ -136,8 +173,21 @@ namespace AIDatasetsPro.src
                 var name = work.Work.Now;
                 if (type_数据集类型 == 数据集类型.目标检测)
                 {
-                    back.ImSave(@$"{path_images}\{name}.jpg");//图像文件
-                    gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");//标签文件yolo
+                    //保存前将多余区域覆盖
+                    {
+                        back = back.Channels() == 1 ? back : back.CvtColor(ColorConversionCodes.BGR2GRAY);
+                        back_src = back_src.Channels() == 1 ? back_src : back_src.CvtColor(ColorConversionCodes.BGR2GRAY);
+
+                        var mask = getmask(back);
+                        back_src.CopyTo(back, mask);
+
+                        //back.SetTo(Scalar.Black, mask);//将不需要的区域置为黑色
+                        
+                        
+                    }
+
+                    back.ImSave(@$"{path_images}\{name}_{file_name}.jpg");//图像文件
+                    gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}_{file_name}.txt");//标签文件yolo
 
                     var file_classes = @$"{path_labels}\classes.txt";//没有此文件labelImg会崩掉
                     if (!File.Exists(file_classes))
@@ -179,7 +229,7 @@ namespace AIDatasetsPro.src
                 //6、显示
                 var dis = back.Clone();
                 CV.ImShow("dis", dis);
-                Cv2.WaitKey();
+                Cv2.WaitKey(1);
             }
             Cv2.DestroyAllWindows();
 
@@ -231,6 +281,52 @@ namespace AIDatasetsPro.src
             #endregion
 
             Cv2.DestroyAllWindows();
+        }
+
+        Mat getmask(Mat img)
+        {
+            var mask = img.Threshold(0, 255, ThresholdTypes.Otsu);
+            Cv2.BitwiseNot(mask, mask);
+
+            var kernel = new Mat(7, 7, MatType.CV_8UC1, new byte[,]
+            {
+                { 0,0,1,1,1,0,0 },
+                { 0,1,1,1,1,1,0 },
+                { 1,1,1,1,1,1,1 },
+                { 1,1,1,1,1,1,1 },
+                { 1,1,1,1,1,1,1 },
+                { 0,1,1,1,1,1,0 },
+                { 0,0,1,1,1,0,0 }
+            });
+
+            Cv2.MorphologyEx(mask, mask, MorphTypes.Close, kernel);//闭运算
+            Cv2.MorphologyEx(mask, mask, MorphTypes.Erode, kernel);//腐蚀
+            Cv2.MorphologyEx(mask, mask, MorphTypes.Dilate, kernel);
+            return mask;
+        }
+        Mat getmask1(Mat img)
+        {
+            var mask = img.Threshold(0, 255, ThresholdTypes.Otsu);
+
+            Cv2.BitwiseNot(mask, mask);
+
+            var kernel = new Mat(7, 7, MatType.CV_8UC1, new byte[,]
+            {
+                { 0,0,1,1,1,0,0 },
+                { 0,1,1,1,1,1,0 },
+                { 1,1,1,1,1,1,1 },
+                { 1,1,1,1,1,1,1 },
+                { 1,1,1,1,1,1,1 },
+                { 0,1,1,1,1,1,0 },
+                { 0,0,1,1,1,0,0 }
+            });
+
+            Cv2.MorphologyEx(mask, mask, MorphTypes.Close, kernel);//闭运算
+
+            Cv2.MorphologyEx(mask, mask, MorphTypes.Dilate, kernel);//腐蚀
+            Cv2.MorphologyEx(mask, mask, MorphTypes.Erode, kernel);//膨胀
+
+            return mask;
         }
     }
 }

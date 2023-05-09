@@ -96,7 +96,7 @@ namespace AIDatasetsPro.src
     #region xray毛刺
     class xray_毛刺1 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\xray毛刺检测\TO252样品图片\TO252框架好品";
+        public string data_dir_path => @"D:\desktop\XRay毛刺检测\TO252样品图片\TO252编带后毛刺废品";
         public double[] region_coord = new[] { 154d, 3, 295, 413 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;

@@ -1,4 +1,5 @@
-﻿using work.test;
+﻿using AIDatasetsPro.core;
+using work.test;
 
 namespace AIDatasetsPro.src
 {
@@ -16,31 +17,15 @@ namespace AIDatasetsPro.src
             foreach (var f in files)
             {
                 var txt = File.ReadAllText(f.FullName).Trim();
-                var lines = txt.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-                for (int j = 0; j < lines.Length; j++)
+                var lines = Base.yolostr2doublearray(txt);
+                for (int i = 0; i < lines.Count; i++)
                 {
-                    var d = lines[j].Split(" ", StringSplitOptions.RemoveEmptyEntries);
-                    if (d.Length < 5) continue;
-
-                    if (d[0] == "24")
-                    {
-                        d[0] = "";
-                        d[1] = "";
-                        d[2] = "";
-                        d[3] = "";
-                        d[4] = "";
-                        lines[j] = string.Join(" ", d);
-                    }
-                    else
-                    {
-                        d[0] = "0";
-                        lines[j] = string.Join(" ", d);
-                    }
-
+                    var (label, x0, y0, w, h) = lines[i];
+                    lines[i] = (0, x0, y0, w, h);
                 }
-                lines = lines.Where(l => l.Trim() != "").ToArray();
-                txt = string.Join("\n", lines).Trim();
+                txt = Base.doublearray2yolostr(lines);
                 File.WriteAllText(f.FullName, txt);
+                Console.WriteLine(f.FullName);
             }
         }
     }

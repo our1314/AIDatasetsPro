@@ -21,11 +21,12 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine();
             var files = new DirectoryInfo(path).GetFiles();
             var img_ext = new[] { ".png", ".jpg", ".bmp", ".jif" };
-            files = files.Where(f => img_ext.Contains(f.Extension) && f.Extension != target_ext).ToArray();
+            files = files.Where(f => img_ext.Contains(f.Extension)/* && f.Extension != target_ext*/).ToArray();
 
             foreach (var f in files)
             {
                 var img = new Mat(f.FullName, ImreadModes.Unchanged);
+                img = img.Channels() == 4 ? img.CvtColor(ColorConversionCodes.BGRA2BGR) : img;
                 img.SaveImage(f.FullName.Replace(f.Extension, target_ext));
                 Console.WriteLine(f.Name);
             }
