@@ -93,7 +93,8 @@ namespace AIDatasetsPro.core
                 size = new Size(w, h);
 
                 var pts = H1 * H2 * wh2pts(size);
-                drawing(pts);
+                drawing(pts, size);
+                
             }
             else if (action == Action.ModifyRect)
             {
@@ -104,7 +105,7 @@ namespace AIDatasetsPro.core
                         {
                             H1 = SE2(pt.X, pt.Y, 0);
                             var pts = H1 * H2 * wh2pts(size);
-                            drawing(pts);
+                            drawing(pts, size);
                         }
                         break;
                     #endregion
@@ -121,7 +122,7 @@ namespace AIDatasetsPro.core
                             var tt = t2 - t1;
                             H2 = SE2(0, 0, theta + tt);
                             var pts = H1 * H2 * wh2pts(size);
-                            drawing(pts);
+                            drawing(pts, size);
                         }
                         break;
                     #endregion
@@ -138,7 +139,7 @@ namespace AIDatasetsPro.core
                             var scale_h = Math.Abs(2 * y) / size.Height;
                             size = new Size(size.Width, scale_h * size.Height);
                             var pts = H1 * H2 * wh2pts(size);
-                            drawing(pts);
+                            drawing(pts, size);
                         }
                         break;
                     case Position.line2_center:
@@ -152,7 +153,7 @@ namespace AIDatasetsPro.core
                             var scale_w = Math.Abs(2 * x) / size.Width;
                             size = new Size(scale_w * size.Width, size.Height);
                             var pts = H1 * H2 * wh2pts(size);
-                            drawing(pts);
+                            drawing(pts, size);
                         }
                         break;
                         #endregion
@@ -176,7 +177,7 @@ namespace AIDatasetsPro.core
         {
             Init();
         }
-        private void drawing(Mat pts)
+        private void drawing(Mat pts, Size size)
         {
             var pt1 = new Point(pts.Get<double>(0, 0), pts.Get<double>(1, 0));
             var pt2 = new Point(pts.Get<double>(0, 1), pts.Get<double>(1, 1));
@@ -205,6 +206,7 @@ namespace AIDatasetsPro.core
             dis.Circle(c3, (int)(f * line_width), Scalar.Red, -1);
             dis.Circle(c4, (int)(f * line_width), Scalar.Red, -1);
 
+            dis.PutText($"{size.Width},{size.Height}", new Point(0, 30), HersheyFonts.Italic, 1, Scalar.Red, 1);
             update?.Invoke(dis);//触发事件
         }
 

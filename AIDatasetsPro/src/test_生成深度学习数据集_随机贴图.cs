@@ -47,7 +47,7 @@ namespace AIDatasetsPro.src
             var path = Console.ReadLine().Trim();//读取贴图文件路径
 
             // 目录
-            var path_root = @$"{path}\out3";
+            var path_root = @$"{path}\out1";
             var path_images = @$"{path_root}\train";//@$"{path_root}\images"
             var path_labels = @$"{path_root}\train";//@$"{path_root}\labels"
             var path_masks = @$"{path_root}\masks";//@$"{path_root}\masks"
@@ -66,11 +66,18 @@ namespace AIDatasetsPro.src
                 // 0、随机获取一张背景图
                 var index_back = new Random().Next(files_back.Length);
                 var back = new Mat(files_back[index_back].FullName, ImreadModes.Color);//背景图像
-                var back_src = back.Clone();
+                
                 //对背景图进行增强
                 {
-                    
+                    var r = new Random();
+                    var a = r.Next(-5, 5);
+                    back = CV.RotImage(back, a, InterpolationFlags.Linear, BorderTypes.Reflect101);
+                    //Cv2.ImShow("dis", back);
+                    //Cv2.WaitKey();
                 }
+                var back_src = back.Clone();
+
+
                 var black = back.EmptyClone().CvtColor(ColorConversionCodes.BGR2GRAY).SetTo(0);//与背景图同样尺寸的黑色图像
                 var file_name = Path.GetFileNameWithoutExtension(files_back[index_back].FullName);
 
@@ -83,12 +90,15 @@ namespace AIDatasetsPro.src
                     //对前景图进行数据增强
                     {
                         var r = new Random();
-                        var a = r.Next(2);
-                        var ra = r.Next(a * 90 - 20, a * 90 + 20);
+                        var a = r.Next(1,2);
+                        var ra = r.Next(a * 90 - 2, a * 90 + 2);
                         fore = CV.RotImage(fore, ra, InterpolationFlags.Linear, BorderTypes.Constant, Scalar.White);
 
                         var scale = r.NextDouble() * 0.4 + 0.7;
                         Cv2.Resize(fore, fore, new Size(), scale, scale);
+
+                        var rr = new Rect(0, 0, Math.Min(fore.Width, back.Width), Math.Min(fore.Height, back.Height));
+                        fore = fore[rr];
                     }
 
                     //2、将四通道的前景图拆分出bgr图像和mask图像
@@ -117,7 +127,7 @@ namespace AIDatasetsPro.src
 
                         var bgr_not = new Mat();
                         Cv2.BitwiseNot(bgr, bgr_not);//因为当前图像需要的前景是黑色的，因此先进行反色处理
-                        var aaa = -new Random().NextDouble() * 0.3 + -0.1;
+                        var aaa = -new Random().NextDouble() * 0.1 + -0.1;
                         //Cv2.AddWeighted(back[rect], 1, bgr_not, -0.1, 0, back[rect]);
                         Cv2.AddWeighted(back[rect], 1, bgr_not, aaa, 0, back[rect]);
                     }
