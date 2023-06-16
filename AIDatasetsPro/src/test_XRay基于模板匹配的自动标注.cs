@@ -96,15 +96,15 @@ namespace AIDatasetsPro.src
     #region xray毛刺
     class xray_毛刺1 : TemplateMatch, IIc
     {
-        public string data_dir_path => @"D:\desktop\xray毛刺数据\产线数据\17";
-        public double[] region_coord = new[] { 400, 184, 585, 790d };
+        public string data_dir_path => @"D:\desktop\xray毛刺数据\518";
+        public double[] region_coord = new[] { 422, 141, 687, 922d };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
         public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_毛刺1()
         {
-            var img_temp = new Mat(@$"{data_dir_path}\1.jpg", ImreadModes.Grayscale);
+            var img_temp = new Mat(@$"{data_dir_path}\Position 1.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
             //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);

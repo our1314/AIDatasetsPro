@@ -69,9 +69,9 @@ namespace AIDatasetsPro.src
                 
                 //对背景图进行增强
                 {
-                    var r = new Random();
-                    var a = r.Next(-5, 5);
-                    back = CV.RotImage(back, a, InterpolationFlags.Linear, BorderTypes.Reflect101);
+                    //var r = new Random();
+                    //var a = r.Next(-5, 5);
+                    //back = CV.RotImage(back, a, InterpolationFlags.Linear, BorderTypes.Reflect101);
                     //Cv2.ImShow("dis", back);
                     //Cv2.WaitKey();
                 }
@@ -91,7 +91,7 @@ namespace AIDatasetsPro.src
                     {
                         var r = new Random();
                         var a = r.Next(1,2);
-                        var ra = r.Next(a * 90 - 2, a * 90 + 2);
+                        var ra = r.Next(a * 90 - 20, a * 90 + 20);
                         fore = CV.RotImage(fore, ra, InterpolationFlags.Linear, BorderTypes.Constant, Scalar.White);
 
                         var scale = r.NextDouble() * 0.4 + 0.7;
