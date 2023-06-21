@@ -39,7 +39,7 @@ namespace AIDatasetsPro.src
                     temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
                 }
 
-                var result_match = ic.FindModel(temp, 0.45, 0, out _, out _, MaxOverlap: 0);
+                var result_match = ic.FindModel(temp, 0.55, 0, out _, out _, MaxOverlap: 0);
                 if (result_match == null) continue;
 
                 var str_label = "";
@@ -47,11 +47,11 @@ namespace AIDatasetsPro.src
                 {
                     var x0 = MakeBorder ? (int)p[0] - border : (int)p[0];
                     var y0 = MakeBorder ? (int)p[1] - border : (int)p[1];
-                    var angle = 0;//p[2] + 0;
+                    var angle = p[2] + 0;
                     var scale = p[3];
                     var score = p[4];
 
-                    //angle = angle * Math.PI / 180d;
+                    angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
                     var pts = CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
@@ -601,6 +601,29 @@ namespace AIDatasetsPro.src
     #endregion
 
     #region 卷盘类
+    class xray_dfn_juanpan : TemplateMatch, IIc
+    {
+        public string data_dir_path => "D:\\desktop\\xray缺陷数据\\dfn\\DFN 卷盘\\all";
+        //public static double[] region_coord = new[] { 362d, 1232, 434, 1318 };
+        //public static int[] contrast = new[] { 40, 73, 4 };
+        public static double[] region_coord = new[] { 175.672, 1223.63, 240.121, 1300.82 };
+        public static int[] contrast = new[] { 8, 25, 4 };
+        public static int mincontrast = 3;
+        public Size size => new(86, 72);
+
+        public xray_dfn_juanpan()
+        {
+            Mat img_temp = new Mat(@$"{data_dir_path}\1.jpg", ImreadModes.Grayscale);
+
+            HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
+            var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.9, scaleMax: 1.1, TemplateAngle: 0);
+
+            Cv2.ImShow("dis", dis);
+            Cv2.WaitKey();
+            Cv2.DestroyAllWindows();
+        }
+    }
+
     class xray_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => "D:\\桌面\\新建文件夹";
@@ -847,5 +870,7 @@ namespace AIDatasetsPro.src
         }
     }
     #endregion
+
+    
 
 }

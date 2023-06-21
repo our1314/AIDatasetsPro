@@ -14,7 +14,7 @@ namespace AIDatasetsPro.src
         {
             Console.WriteLine("输入dota数据集路径：");
             var dir = Console.ReadLine();
-            var files = new DirectoryInfo(dir).GetFiles();
+            var files = new DirectoryInfo(dir).GetFiles("*", SearchOption.AllDirectories);
             files = files.OrderBy(f => f.LastWriteTime).ToArray();
 
             var files_image = files.Where(f => f.Extension == ".png" || f.Extension == ".jpg" || f.Extension == ".bmp");
