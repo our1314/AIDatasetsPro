@@ -121,7 +121,7 @@ namespace AIDatasetsPro.src
                     }
                     else if (type_贴图方式 == 贴图方式.图像融合)
                     {
-                        bgr = bgr.Channels() == 1 ? bgr : bgr.CvtColor(ColorConversionCodes.BGR2GRAY);//AddWeighted似乎只能用于单通道图像，若需要三个通道则通道拆分后再融合
+                        bgr = bgr.Channels() == 1 ? bgr : bgr.CvtColor(ColorConversionCodes.BGR2GRAY);
                         back = back.Channels() == 1 ? back : back.CvtColor(ColorConversionCodes.BGR2GRAY);
                         back_clone = back.Clone();
 
