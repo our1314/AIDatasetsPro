@@ -1,6 +1,7 @@
 ﻿using AIDatasetsPro.core;
 using OpenCvSharp;
 using System.Threading.Tasks;
+using work;
 using work.ai;
 using work.cv;
 using work.test;
@@ -71,7 +72,7 @@ namespace AIDatasetsPro.src
                 {
                     //var r = new Random();
                     //var a = r.Next(-5, 5);
-                    //back = CV.RotImage(back, a, InterpolationFlags.Linear, BorderTypes.Reflect101);
+                    //back = Utils.RotImage(back, a, InterpolationFlags.Linear, BorderTypes.Reflect101);
                     //Cv2.ImShow("dis", back);
                     //Cv2.WaitKey();
                 }
@@ -92,7 +93,7 @@ namespace AIDatasetsPro.src
                         var r = new Random();
                         var a = r.Next(1,2);
                         var ra = r.Next(a * 90 - 20, a * 90 + 20);
-                        fore = CV.RotImage(fore, ra, InterpolationFlags.Linear, BorderTypes.Constant, Scalar.White);
+                        fore = Utils.RotImage(fore, ra, InterpolationFlags.Linear, BorderTypes.Constant, Scalar.White);
 
                         var scale = r.NextDouble() * 0.4 + 0.7;
                         Cv2.Resize(fore, fore, new Size(), scale, scale);
@@ -180,7 +181,7 @@ namespace AIDatasetsPro.src
                 }
 
                 //5、保存
-                var name = work.Work.Now;
+                var name = work.Utils.Now;
                 if (type_数据集类型 == 数据集类型.目标检测)
                 {
                     //保存前将多余区域覆盖
@@ -238,7 +239,7 @@ namespace AIDatasetsPro.src
 
                 //6、显示
                 var dis = back.Clone();
-                CV.ImShow("dis", dis);
+                Utils.ImShow("dis", dis);
                 Cv2.WaitKey(1);
             }
             Cv2.DestroyAllWindows();
@@ -266,7 +267,7 @@ namespace AIDatasetsPro.src
                         img.Rectangle(pt1, pt2, Scalar.Red, 3);
                     }
 
-                    CV.ImShow("dis", img);
+                    Utils.ImShow("dis", img);
                     Cv2.WaitKey(500);
                 }
             }
@@ -284,7 +285,7 @@ namespace AIDatasetsPro.src
                     //Cv2.MinMaxLoc(mask, out double min, out double max);
 
                     img = img * 0.5 + mask * 0.5;
-                    CV.ImShow("dis", img);
+                    Utils.ImShow("dis", img);
                     Cv2.WaitKey(500);
                 }
             }

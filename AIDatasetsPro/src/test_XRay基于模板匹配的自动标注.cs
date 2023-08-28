@@ -5,6 +5,7 @@ using work;
 using work.cv;
 using work.math;
 using work.test;
+using static work.Utils;
 
 namespace AIDatasetsPro.src
 {
@@ -36,7 +37,7 @@ namespace AIDatasetsPro.src
                 var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
                 if (MakeBorder)
                 {
-                    temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
+                    temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, Utils.GetHistMostGray(temp));
                 }
 
                 var result_match = ic.FindModel(temp, 0.55, 0, out _, out _, MaxOverlap: 0);
@@ -53,12 +54,12 @@ namespace AIDatasetsPro.src
 
                     angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
-                    var pts = CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
+                    var pts = Utils.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
                     #region 保存ROI
                     {
-                        var roi = CV.GetRotateROI(src, new Point(x0, y0), anchor1, angle);
-                        roi.ImSave(@$"{data_dir_path}\ROI\{Work.Now}.png");
+                        var roi = Utils.GetRotateROI(src, new Point(x0, y0), anchor1, angle);
+                        roi.ImSave(@$"{data_dir_path}\ROI\{Utils.Now}.png");
                     }
                     #endregion
 
@@ -645,7 +646,7 @@ namespace AIDatasetsPro.src
     }
     class xray_juanpan_ncc : TemplateMatch, IIc
     {
-        public static double[] region_coord = new[] { 320.551, 1006.42, MathExp.Rad(95.7475), 112.918, 45.7898 };
+        public static double[] region_coord = new[] { 320.551, 1006.42, Utils.Rad(95.7475), 112.918, 45.7898 };
         //public static int[] contrast = new[] { 12, 24, 4 };
         //public static int mincontrast = 5;
 
@@ -666,7 +667,7 @@ namespace AIDatasetsPro.src
     class xray_sot23_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sot23\LA22171622-28";
-        public double[] region_coord = new[] { 131.391, 718.695, MathExp.Rad(-0.266538), 172.6, 66.2477 };
+        public double[] region_coord = new[] { 131.391, 718.695, Utils.Rad(-0.266538), 172.6, 66.2477 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -685,7 +686,7 @@ namespace AIDatasetsPro.src
     class xray_sc70_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sc70\2.4SC70-01";
-        public double[] region_coord = new[] { 198.446, 1127.02, MathExp.Rad(-18.4308), 95.5052, 49.2835 };
+        public double[] region_coord = new[] { 198.446, 1127.02, Utils.Rad(-18.4308), 95.5052, 49.2835 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -705,7 +706,7 @@ namespace AIDatasetsPro.src
     class xray_sc88_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sc88\2.4 SC88-01";
-        public double[] region_coord = new[] { 226.494, 1130.51, MathExp.Rad(-17.3797), 99.0642, 47.0692 };
+        public double[] region_coord = new[] { 226.494, 1130.51, Utils.Rad(-17.3797), 99.0642, 47.0692 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -747,7 +748,7 @@ namespace AIDatasetsPro.src
     //class xray_sot25_juanpan : TemplateMatch, IIc
     //{
     //    public string data_dir_path => @"D:\desktop\xray\sot25";
-    //    public double[] region_coord = new[] { 239.664, 1033.29, MathExp.Rad(-91.972), 54.458, 129.304 };
+    //    public double[] region_coord = new[] { 239.664, 1033.29, Utils.Rad(-91.972), 54.458, 129.304 };
     //    public int[] contrast = new[] { 20, 41, 8 };
     //    public int mincontrast = 3;
 
@@ -790,7 +791,7 @@ namespace AIDatasetsPro.src
     class xray_sot26_2_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray\误报率高\LA23124275-12";
-        public double[] region_coord = new[] { 473.574, 787.358, MathExp.Rad(-88.971), 130, 130 };
+        public double[] region_coord = new[] { 473.574, 787.358, Utils.Rad(-88.971), 130, 130 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -812,7 +813,7 @@ namespace AIDatasetsPro.src
     class xray_sot23e_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray数据\smt\sot23e_juanpan";
-        public double[] region_coord = new[] { 314, 1148.5, MathExp.Rad(-91), 91 / 2.0, 252 / 2.0 };
+        public double[] region_coord = new[] { 314, 1148.5, Utils.Rad(-91), 91 / 2.0, 252 / 2.0 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -833,7 +834,7 @@ namespace AIDatasetsPro.src
     class xray_sot25_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray数据\smt\sot25_juanpan";
-        public double[] region_coord = new[] { 224, 689.5, MathExp.Rad(-95), 106 / 2.0, 256 / 2.0 };
+        public double[] region_coord = new[] { 224, 689.5, Utils.Rad(-95), 106 / 2.0, 256 / 2.0 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -853,7 +854,7 @@ namespace AIDatasetsPro.src
     class xray_sot26_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray数据\smt\sot26_juanpan";
-        public double[] region_coord = new[] { 162, 1140.5, MathExp.Rad(-91), 122 / 2.0, 256 / 2.0 };
+        public double[] region_coord = new[] { 162, 1140.5, Utils.Rad(-91), 122 / 2.0, 256 / 2.0 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 

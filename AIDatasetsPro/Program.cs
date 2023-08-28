@@ -45,7 +45,8 @@ namespace AIDatasetsPro
                 new test_显示dota数据集(),
                 new test_根据图像文件删除多余的标签文件(),
                 new test_将sot23e的标注尺寸扩大(),
-                new test_xray毛刺_maskcopy()
+                new test_xray毛刺_maskcopy(),
+                new test_生成XRay空洞检测数据集()
             );
 
             testManager.ShowTestEntrance();

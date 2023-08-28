@@ -1,6 +1,7 @@
 ﻿using AIDatasetsPro.core;
 using HalconDotNet;
 using OpenCvSharp;
+using work;
 using work.cv;
 using work.math;
 using work.test;
@@ -25,7 +26,7 @@ namespace AIDatasetsPro.src2
                 var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
                 if (MakeBorder)
                 {
-                    src = src.CopyMakeBorder(border, border, border, border, BorderTypes.Replicate, CV.GetHistMostGray(src));
+                    src = src.CopyMakeBorder(border, border, border, border, BorderTypes.Replicate, Utils.GetHistMostGray(src));
                 }
 
                 var result_match = ic.FindModel(src, 0.7, 0, out _, out _);
@@ -42,7 +43,7 @@ namespace AIDatasetsPro.src2
 
                     angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
-                    var pts = CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
+                    var pts = Utils.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
                     var classname = ic.GetType().Name;
                     if (!classname.Contains("juanpan"))
@@ -71,7 +72,7 @@ namespace AIDatasetsPro.src2
     {
         public string data_dir_path => @"..\..\..\data";
 
-        public double[] region_coord = new[] { 276.836, 631.382, MathExp.Rad(10.0711), 168.208, 63.286 };
+        public double[] region_coord = new[] { 276.836, 631.382, Utils.Rad(10.0711), 168.208, 63.286 };
         public int[] contrast = new[] { 40, 73, 4 };
         public int mincontrast = 20;
         public Size size => new Size(region_coord[3] * 2, region_coord[4] * 2);

@@ -40,7 +40,7 @@ namespace AIDatasetsPro.src
                 var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
                 if (MakeBorder)
                 {
-                    temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, CV.GetHistMostGray(temp));
+                    temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, Utils.GetHistMostGray(temp));
                 }
 
                 var result_match = ic.FindModel(temp, 0.45, 0, out _, out _, MaxOverlap: 0);
@@ -57,12 +57,12 @@ namespace AIDatasetsPro.src
 
                     //angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
-                    var pts = CV.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
+                    var pts = Utils.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
                     #region 保存ROI
                     {
-                        var roi = CV.GetRotateROI(src, new Point(x0, y0), anchor1, angle);
-                        roi.ImSave(@$"{data_dir_path}\ROI\{Work.Now}.png");
+                        var roi = Utils.GetRotateROI(src, new Point(x0, y0), anchor1, angle);
+                        roi.ImSave(@$"{data_dir_path}\ROI\{Utils.Now}.png");
                     }
                     #endregion
 

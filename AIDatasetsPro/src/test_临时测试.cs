@@ -1,4 +1,5 @@
 ﻿using OpenCvSharp;
+using work;
 using work.cv;
 using work.test;
 using static System.Math;
@@ -94,7 +95,7 @@ namespace AIDatasetsPro.src
             //Console.WriteLine((p.Col(1).T() * p.Col(2)).ToMat().Dump());
             //Console.WriteLine((p.Col(2).T() * p.Col(0)).ToMat().Dump());
 
-            var a = work.math.MathExp._SO3(p);
+            var a = work.Utils._SO3(p);
             Console.WriteLine(a.Dump());
             return;
 
@@ -117,7 +118,7 @@ namespace AIDatasetsPro.src
                 var img = src.Resize(new Size(), scale, scale);
                 img = img - 100;
                 var name = Path.GetFileNameWithoutExtension(path);
-                img.ImSave(path.Replace(name, work.Work.Now));
+                img.ImSave(path.Replace(name, work.Utils.Now));
             }
         }
     }
