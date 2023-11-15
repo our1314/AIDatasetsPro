@@ -1,13 +1,7 @@
 ﻿using AIDatasetsPro.core;
 using OpenCvSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using our1314;
 using System.Text;
-using System.Threading.Tasks;
-using work;
-using work.cv;
-using work.test;
 
 namespace AIDatasetsPro.src
 {
@@ -21,7 +15,7 @@ namespace AIDatasetsPro.src
             var list_files = Directory.GetFiles(dir);
             var images = list_files.Where(f => Path.GetExtension(f) == ".jpg").ToList();
             var labels = list_files.Where(f => Path.GetExtension(f) == ".txt" && Path.GetFileName(f) != "classes.txt").ToList();
-            
+
             foreach (var label_path in labels)
             {
                 var image_path = images.First(f => Path.GetFileNameWithoutExtension(f) == Path.GetFileNameWithoutExtension(label_path));

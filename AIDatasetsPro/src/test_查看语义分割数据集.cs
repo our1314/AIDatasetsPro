@@ -1,7 +1,5 @@
 ﻿using OpenCvSharp;
-using work;
-using work.cv;
-using work.test;
+using our1314;
 
 namespace AIDatasetsPro.src
 {
@@ -50,7 +48,7 @@ namespace AIDatasetsPro.src
                     //Cv2.MinMaxLoc(mask, out double min, out double max);
 
                     img = img * 0.5 + mask * 0.5;
-                    Utils.ImShow("dis", img);
+                    work.ImShow("dis", img);
                     Cv2.WaitKey(200);
                 }
             }

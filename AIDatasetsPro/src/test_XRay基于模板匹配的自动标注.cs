@@ -1,11 +1,8 @@
 ﻿using AIDatasetsPro.core;
 using HalconDotNet;
 using OpenCvSharp;
-using work;
-using work.cv;
-using work.math;
-using work.test;
-using static work.Utils;
+using our1314;
+using static our1314.work;
 
 namespace AIDatasetsPro.src
 {
@@ -22,7 +19,7 @@ namespace AIDatasetsPro.src
             var ic = (IIc)type.Assembly.CreateInstance(className);
             var data_dir_path = ic.data_dir_path;
             var img_files = new DirectoryInfo(data_dir_path).GetFiles();
-            img_files = img_files.Where(f => f.Extension==".jpg" || f.Extension == ".bmp" || f.Extension == ".png").ToArray();
+            img_files = img_files.Where(f => f.Extension == ".jpg" || f.Extension == ".bmp" || f.Extension == ".png").ToArray();
 
             HOperatorSet.SetSystem("border_shape_models", "true");
             var anchor = ic.size;//new Size(juanpan.size.Width,juanpan.size.Height+10);//
@@ -37,7 +34,7 @@ namespace AIDatasetsPro.src
                 var dis = src.CvtColor(ColorConversionCodes.GRAY2BGR);
                 if (MakeBorder)
                 {
-                    temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, Utils.GetHistMostGray(temp));
+                    temp = temp.CopyMakeBorder(border, border, border, border, BorderTypes.Constant, work.GetHistMostGray(temp));
                 }
 
                 var result_match = ic.FindModel(temp, 0.55, 0, out _, out _, MaxOverlap: 0);
@@ -54,12 +51,12 @@ namespace AIDatasetsPro.src
 
                     angle = angle * Math.PI / 180d;
                     var anchor1 = new Size(anchor.Width * scale, anchor.Height * scale);
-                    var pts = Utils.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
+                    var pts = work.DrawRotateRect(ref dis, new Point(x0, y0), anchor1, angle);
 
                     #region 保存ROI
                     {
-                        var roi = Utils.GetRotateROI(src, new Point(x0, y0), anchor1, angle);
-                        roi.ImSave(@$"{data_dir_path}\ROI\{Utils.Now}.png");
+                        var roi = work.GetRotateROI(src, new Point(x0, y0), anchor1, angle);
+                        roi.ImSave(@$"{data_dir_path}\ROI\{work.Now}.png");
                     }
                     #endregion
 
@@ -110,7 +107,7 @@ namespace AIDatasetsPro.src
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
             //var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.5, scaleMax: 2.0);
             var dis = CreateNccModel(img_temp, ModelRegion, 0, 0);
-            
+
 
             Cv2.ImShow("dis", dis);
             Cv2.WaitKey();
@@ -141,7 +138,7 @@ namespace AIDatasetsPro.src
     #endregion
 
     #region 料片类
-    class xray_sc88 : TemplateMatch, IIc
+    class xray_sc88 : work.TemplateMatch, IIc
     {
         public string data_dir_path => throw new NotImplementedException();
         public Size size => throw new NotImplementedException();
@@ -156,7 +153,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sc70 : TemplateMatch, IIc
+    class xray_sc70 : work.TemplateMatch, IIc
     {
         public string data_dir_path => throw new NotImplementedException();
         public Size size => throw new NotImplementedException();
@@ -171,7 +168,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sc70_1 : TemplateMatch, IIc
+    class xray_sc70_1 : work.TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\smt sc70\src_ng";
         public static double[] region_coord = new[] { 126.507, 235.61, 240.983, 421.285 };
@@ -191,7 +188,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sc89 : work.cv.TemplateMatch
+    class xray_sc89 : work.TemplateMatch
     {
         public xray_sc89()
         {
@@ -204,7 +201,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sod123 : work.cv.TemplateMatch
+    class xray_sod123 : work.TemplateMatch
     {
         public xray_sod123()
         {
@@ -288,7 +285,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    class xray_sod523 : TemplateMatch, IIc
+    class xray_sod523 : work.TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\sod523";
         public static double[] region_coord = new[] { 294.994, 540.787, 412.348, 616.143 };
@@ -351,7 +348,7 @@ namespace AIDatasetsPro.src
     class xray_sod23lc_1 : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray数据\smt1\SOT23LC-NG";
-        public static double[] region_coord = new[] {  306, 1104, 545d, 1404 };
+        public static double[] region_coord = new[] { 306, 1104, 545d, 1404 };
         public static int[] contrast = new[] { 22, 51, 8 };
         public static int mincontrast = 3;
 
@@ -361,7 +358,7 @@ namespace AIDatasetsPro.src
             Mat img_temp = new Mat(@$"{data_dir_path}\LF-SOT2526LC-9units-all__1__007_SOT23LC02_0000.jpg", ImreadModes.Grayscale);
 
             HOperatorSet.GenRectangle1(out HObject ModelRegion, region_coord[0], region_coord[1], region_coord[2], region_coord[3]);
-            var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.7, scaleMax: 1/0.7);
+            var dis = CreateScaledShapeModel(img_temp, ModelRegion, contrast, mincontrast, scaleMin: 0.7, scaleMax: 1 / 0.7);
 
             Cv2.ImShow("dis", dis);
             Cv2.WaitKey();
@@ -519,7 +516,7 @@ namespace AIDatasetsPro.src
     class xray_dfn_SOD0603 : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\work\files\deeplearn_datasets\x-ray\obj-det\dfn0603\train";//D:\desktop\xray数据\dfn\DFN0603
-        public double[] region_coord = new[] { 255,561d, 334, 601  };//{ 149d, 379d, 240d, 433d };
+        public double[] region_coord = new[] { 255, 561d, 334, 601 };//{ 149d, 379d, 240d, 433d };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -557,7 +554,7 @@ namespace AIDatasetsPro.src
             Cv2.DestroyAllWindows();
         }
     }
-    
+
     class xray_dfn_SOD882 : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\dfn\SOD882";
@@ -646,7 +643,7 @@ namespace AIDatasetsPro.src
     }
     class xray_juanpan_ncc : TemplateMatch, IIc
     {
-        public static double[] region_coord = new[] { 320.551, 1006.42, Utils.Rad(95.7475), 112.918, 45.7898 };
+        public static double[] region_coord = new[] { 320.551, 1006.42, work.Rad(95.7475), 112.918, 45.7898 };
         //public static int[] contrast = new[] { 12, 24, 4 };
         //public static int mincontrast = 5;
 
@@ -667,7 +664,7 @@ namespace AIDatasetsPro.src
     class xray_sot23_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sot23\LA22171622-28";
-        public double[] region_coord = new[] { 131.391, 718.695, Utils.Rad(-0.266538), 172.6, 66.2477 };
+        public double[] region_coord = new[] { 131.391, 718.695, work.Rad(-0.266538), 172.6, 66.2477 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -686,7 +683,7 @@ namespace AIDatasetsPro.src
     class xray_sc70_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sc70\2.4SC70-01";
-        public double[] region_coord = new[] { 198.446, 1127.02, Utils.Rad(-18.4308), 95.5052, 49.2835 };
+        public double[] region_coord = new[] { 198.446, 1127.02, work.Rad(-18.4308), 95.5052, 49.2835 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -706,7 +703,7 @@ namespace AIDatasetsPro.src
     class xray_sc88_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"\\192.168.11.10\Public\HuangRX\X-RAY\卷盘 sc88\2.4 SC88-01";
-        public double[] region_coord = new[] { 226.494, 1130.51, Utils.Rad(-17.3797), 99.0642, 47.0692 };
+        public double[] region_coord = new[] { 226.494, 1130.51, work.Rad(-17.3797), 99.0642, 47.0692 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -730,7 +727,7 @@ namespace AIDatasetsPro.src
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
-        public Size size => new(region_coord[3]- region_coord[1], region_coord[2] - region_coord[0]);
+        public Size size => new(region_coord[3] - region_coord[1], region_coord[2] - region_coord[0]);
         public xray_sot23lc_juanpan()
         {
             var img_temp = new Mat(@$"{data_dir_path}\sot23lc.jpg", ImreadModes.Grayscale);
@@ -748,7 +745,7 @@ namespace AIDatasetsPro.src
     //class xray_sot25_juanpan : TemplateMatch, IIc
     //{
     //    public string data_dir_path => @"D:\desktop\xray\sot25";
-    //    public double[] region_coord = new[] { 239.664, 1033.29, Utils.Rad(-91.972), 54.458, 129.304 };
+    //    public double[] region_coord = new[] { 239.664, 1033.29, work.Rad(-91.972), 54.458, 129.304 };
     //    public int[] contrast = new[] { 20, 41, 8 };
     //    public int mincontrast = 3;
 
@@ -791,7 +788,7 @@ namespace AIDatasetsPro.src
     class xray_sot26_2_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray\误报率高\LA23124275-12";
-        public double[] region_coord = new[] { 473.574, 787.358, Utils.Rad(-88.971), 130, 130 };
+        public double[] region_coord = new[] { 473.574, 787.358, work.Rad(-88.971), 130, 130 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -813,7 +810,7 @@ namespace AIDatasetsPro.src
     class xray_sot23e_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray数据\smt\sot23e_juanpan";
-        public double[] region_coord = new[] { 314, 1148.5, Utils.Rad(-91), 91 / 2.0, 252 / 2.0 };
+        public double[] region_coord = new[] { 314, 1148.5, work.Rad(-91), 91 / 2.0, 252 / 2.0 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -834,7 +831,7 @@ namespace AIDatasetsPro.src
     class xray_sot25_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray数据\smt\sot25_juanpan";
-        public double[] region_coord = new[] { 224, 689.5, Utils.Rad(-95), 106 / 2.0, 256 / 2.0 };
+        public double[] region_coord = new[] { 224, 689.5, work.Rad(-95), 106 / 2.0, 256 / 2.0 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -854,7 +851,7 @@ namespace AIDatasetsPro.src
     class xray_sot26_juanpan : TemplateMatch, IIc
     {
         public string data_dir_path => @"D:\desktop\xray数据\smt\sot26_juanpan";
-        public double[] region_coord = new[] { 162, 1140.5, Utils.Rad(-91), 122 / 2.0, 256 / 2.0 };
+        public double[] region_coord = new[] { 162, 1140.5, work.Rad(-91), 122 / 2.0, 256 / 2.0 };
         public int[] contrast = new[] { 20, 41, 8 };
         public int mincontrast = 3;
 
@@ -872,6 +869,6 @@ namespace AIDatasetsPro.src
     }
     #endregion
 
-    
+
 
 }

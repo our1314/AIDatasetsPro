@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static work.Utils;
+using static work.work;
 using static System.Math;
 
 namespace AIDatasetsPro.core

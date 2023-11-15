@@ -1,6 +1,5 @@
 ﻿using OpenCvSharp;
-using work;
-using work.test;
+using our1314;
 using Scalar = OpenCvSharp.Scalar;
 
 namespace AIDatasetsPro.src
@@ -55,7 +54,7 @@ namespace AIDatasetsPro.src
                     Cv2.ImShow("dis", image);
                     Cv2.WaitKey(1);
 
-                    var name = Utils.Now;
+                    var name = work.Now;
                     image.ImSave(@$"D:\work\files\deeplearn_datasets\xray空洞检测\空洞检测生成数据集\{name}.jpg");
                     label.ImSave(@$"D:\work\files\deeplearn_datasets\xray空洞检测\空洞检测生成数据集\{name}.png");
                 }

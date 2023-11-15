@@ -1,11 +1,6 @@
 ﻿using OpenCvSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using work.math;
-using work.test;
+using our1314;
+using static our1314.work;
 
 namespace AIDatasetsPro.src
 {
@@ -62,9 +57,8 @@ namespace AIDatasetsPro.src
                 pts.PushBack(new Mat(1, 2, MatType.CV_64FC1, new double[] { x, y }));
                 if (pts.Rows < 3) return;
                 //绘制样条曲线
-                Spline spline = new Spline();
-                Mat line = spline.QuadraticSpline(pts);
-                spline.GetQuadraticSplineCoord(pts, line, out double[] xx, out double[] yy);
+                Mat line = Spline.QuadraticSpline(pts);
+                Spline.GetQuadraticSplineCoord(pts, line, out double[] xx, out double[] yy);
 
                 dis_draw = new Mat();
                 Cv2.AddWeighted(src, 1, mask, 0.2, 0, dis_draw);
@@ -81,10 +75,9 @@ namespace AIDatasetsPro.src
                 pts.Set<double>(1, index, y);
 
                 //绘制样条曲线
-                Spline spline = new Spline();
-                Mat line = spline.QuadraticSpline(pts);
+                Mat line = Spline.QuadraticSpline(pts);
 
-                spline.GetQuadraticSplineCoord(pts, line, out double[] xx, out double[] yy);
+                Spline.GetQuadraticSplineCoord(pts, line, out double[] xx, out double[] yy);
 
                 dis_draw = new Mat();
                 Cv2.AddWeighted(src, 1, mask, 0.2, 0, dis_draw);

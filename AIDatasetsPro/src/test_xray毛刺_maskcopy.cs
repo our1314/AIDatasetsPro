@@ -1,10 +1,5 @@
 ﻿using OpenCvSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using work.test;
+using our1314;
 
 namespace AIDatasetsPro.src
 {
@@ -17,7 +12,7 @@ namespace AIDatasetsPro.src
 
             var img_files = Directory.GetFiles("D:\\desktop\\XRay毛刺检测\\TO252样品图片\\TO252编带好品\\ROI\\删除多余像素\\train", "*.jpg", SearchOption.TopDirectoryOnly);
 
-            foreach(var f_img in img_files)
+            foreach (var f_img in img_files)
             {
                 var s = src_files.Where(p => Path.GetFileNameWithoutExtension(f_img).EndsWith(Path.GetFileNameWithoutExtension(p))).ToList();
                 var f_src = s.First();
@@ -25,7 +20,7 @@ namespace AIDatasetsPro.src
                 var img = new Mat(f_img, ImreadModes.Grayscale);
                 var mask = getmask(src);
                 //Cv2.CopyTo(src, img, mask);
-                img.SetTo(Scalar.Black,mask);
+                img.SetTo(Scalar.Black, mask);
 
                 Cv2.ImShow("img", img);
                 Cv2.WaitKey();

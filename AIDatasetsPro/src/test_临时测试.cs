@@ -1,7 +1,5 @@
 ﻿using OpenCvSharp;
-using work;
-using work.cv;
-using work.test;
+using our1314;
 using static System.Math;
 namespace AIDatasetsPro.src
 {
@@ -11,7 +9,7 @@ namespace AIDatasetsPro.src
         {
             var image_files = new DirectoryInfo(@"D:\work\files\deeplearn_datasets\test_datasets\xray_real\images").GetFiles().ToList();
             var mask_files = new DirectoryInfo(@"D:\work\files\deeplearn_datasets\test_datasets\xray_real\masks").GetFiles().ToList();
-            for(int i=0; i<image_files.Count;i++)
+            for (int i = 0; i < image_files.Count; i++)
             {
                 var img = new Mat(image_files[i].FullName, ImreadModes.Grayscale);
                 var mask = new Mat(mask_files[i].FullName, ImreadModes.Grayscale);
@@ -33,7 +31,7 @@ namespace AIDatasetsPro.src
             //{
             //    var img = new Mat(file.FullName, ImreadModes.Grayscale);
             //    var bin = img.Threshold(1, 255, ThresholdTypes.BinaryInv);
-                
+
             //    bin.ImSave(file.FullName.Replace("masks", "masks1"));
 
             //    var dis = new Mat();
@@ -43,7 +41,7 @@ namespace AIDatasetsPro.src
             //}
 
             //Cv2.DestroyAllWindows();
-            
+
 
 
 
@@ -95,7 +93,7 @@ namespace AIDatasetsPro.src
             //Console.WriteLine((p.Col(1).T() * p.Col(2)).ToMat().Dump());
             //Console.WriteLine((p.Col(2).T() * p.Col(0)).ToMat().Dump());
 
-            var a = work.Utils._SO3(p);
+            var a = work._SO3(p);
             Console.WriteLine(a.Dump());
             return;
 
@@ -118,7 +116,7 @@ namespace AIDatasetsPro.src
                 var img = src.Resize(new Size(), scale, scale);
                 img = img - 100;
                 var name = Path.GetFileNameWithoutExtension(path);
-                img.ImSave(path.Replace(name, work.Utils.Now));
+                img.ImSave(path.Replace(name, work.Now));
             }
         }
     }

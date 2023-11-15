@@ -1,11 +1,8 @@
 ﻿using NumSharp;
 using OpenCvSharp;
-using System;
+using our1314;
 using TorchSharp;
-using work;
-using work.cv;
-using work.math;
-using work.test;
+using static our1314.work;
 
 namespace AIDatasetsPro.src
 {
@@ -27,8 +24,8 @@ namespace AIDatasetsPro.src
                 var pts = new Mat();
                 Cv2.HConcat(mx, my, pts);
 
-                var X = new Spline().QuadraticSpline(pts);
-                new Spline().GetQuadraticSplineCoord(pts, X, out double[] xx, out double[] yy);
+                var X = Spline.QuadraticSpline(pts);
+                Spline.GetQuadraticSplineCoord(pts, X, out double[] xx, out double[] yy);
 
                 var x_min = xx.Min();
                 var x_max = xx.Max();
@@ -204,7 +201,7 @@ namespace AIDatasetsPro.src
                     }
                     #endregion
 
-                    //var name = work.Utils.Now;
+                    //var name = work.work.Now;
                     //back.ImSave(@$"{path_images}\{name}.jpg");
                     //gen_yolo_labels.Trim().StrSave(@$"{path_labels}\{name}.txt");
                     //black.ImSave(@$"{path_masks}\{name}.png");
@@ -212,7 +209,7 @@ namespace AIDatasetsPro.src
                     //6、显示
                     var dis = back.Clone();
                     //dis.PutText($"{black.Channels()}", new Point(0, 100), HersheyFonts.Italic, 2, Scalar.Red, 3);
-                    Utils.ImShow("dis", dis);
+                    work.ImShow("dis", dis);
                     Cv2.WaitKey(1);
                 }
 
@@ -246,7 +243,7 @@ namespace AIDatasetsPro.src
                         //Cv2.MinMaxLoc(mask, out double min, out double max);
 
                         img = img * 0.5 + mask * 0.5;
-                        Utils.ImShow("dis", img);
+                        work.ImShow("dis", img);
                         Cv2.WaitKey(200);
                     }
                 }
