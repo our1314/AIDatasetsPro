@@ -1,14 +1,8 @@
 ﻿using AIDatasetsPro.core;
 using HalconDotNet;
 using OpenCvSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using work.cv;
-using work;
-using work.test;
+using our1314;
+using static our1314.work;
 
 namespace AIDatasetsPro.src
 {

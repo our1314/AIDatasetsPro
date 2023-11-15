@@ -1,11 +1,6 @@
 ﻿using OpenCvSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static work.work;
 using static System.Math;
+using static our1314.work;
 
 namespace AIDatasetsPro.core
 {
@@ -94,7 +89,7 @@ namespace AIDatasetsPro.core
 
                 var pts = H1 * H2 * wh2pts(size);
                 drawing(pts, size);
-                
+
             }
             else if (action == Action.ModifyRect)
             {
